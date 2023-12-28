@@ -5,6 +5,7 @@
 #define SUNFLOWER_RATE 10
 
 class Sunflower :public Plant {
+public:
 	Sunflower() { init_plant(); };
 	~Sunflower() = default;
 	virtual void init_plant();//初始化植物属性
