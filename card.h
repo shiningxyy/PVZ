@@ -49,7 +49,7 @@ public:
 	Rect rect;
 	bool cold;//判断冷却
 	CardType ct;//卡片类型
-
+	Vec2 pos;
 	//函数
 	Card() = default;
 	~Card() = default;
@@ -60,7 +60,9 @@ public:
 
 	Sprite* sprite_init(const std::string name, Vec2 pos0) {
 		sprite = Sprite::create("card_" + name + ".png");
+		sprite->setScale(0.5f);
 		sprite->setPosition(pos0);
+		pos = pos0;
 		return sprite;
 	};//初始化精灵
 	Sprite* cd_sprite_init(const std::string name, Vec2 pos0) {
