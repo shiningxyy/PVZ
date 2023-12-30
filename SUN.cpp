@@ -4,16 +4,35 @@ USING_NS_CC;
 
 using namespace ui;
 SUN::SUN() {
-    num_sun = 0;
+    num_sun = 0;//自己下落的数量
     time_sun=0.0;//阳光保留时间
     collection=0;//收集到的阳光
     sunsprite = Sprite::create("sun.png");//用太阳图片创建spirit
     this->scheduleUpdate();
     //Layer::getInstance()->addChild(spSun, 202);
 }
-SUN::~SUN() {
+SUN::SUN(int producedby) {
+    num_sun = 0;//自己下落的数量
+    time_sun = 0.0;//阳光保留时间
+    collection = 0;//收集到的阳光
+    sunsprite = Sprite::create("sun.png");//用太阳图片创建spirit
+    this->scheduleUpdate();
+    if (producedby == sky) {
+        producesun();
+        num_sun++;
+    }
+    if (producedby == sunflower) {
 
+    }
 }
+SUN::~SUN() {
+}
+void SUN::jump(Vec2& position_) {
+    sunsprite->setPosition(position_.x, position_.y);
+    auto fadeIn = FadeIn::create(1.0f);
+    sunsprite->runAction(fadeIn);
+}
+
 void SUN::producesun() {
     sunsprite->setScale(0.2f);
     
@@ -51,7 +70,7 @@ void SUN::move_2() {
     auto removeSelf = RemoveSelf::create();
   
 
-    auto seq = Sequence::create(moveToup,scaleTo, fadeOut, nullptr);//再加个渐变
+    auto seq = Sequence::create(moveToup,scaleTo, fadeOut, nullptr);
 
     sunsprite->runAction(seq);
 }//飞到左上角，然后缩小，左上角坐标（0，ymax）

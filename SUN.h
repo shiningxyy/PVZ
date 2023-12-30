@@ -8,9 +8,11 @@ USING_NS_CC;
 #include "cocostudio/CocoStudio.h"
 #define  X_MAX 900
 #define  Y_MAX 600
+#define  sky 0
+#define  sunflower 1
 class SUN :public cocos2d::Sprite
 {
-public:
+protected:
     int num_sun;//屏幕上存在阳光的数量
     double time_sun;//阳光保留时间
     int collection;//收集到的阳光
@@ -20,10 +22,10 @@ public:
     void producesun();
     void move_2();
     void collectsun();
-    
 public:
     void onMouseDown(Event* event);
     SUN();
+    SUN(int);
     ~SUN();//到达阳光保留时间，自动渐变消失
     void start_move() {
         producesun();
@@ -33,7 +35,7 @@ public:
     {
         collectsun();
     }//onMouseDown鼠标按下，然后callback，之后不接受
-  
+    void jump(Vec2& position_);
 };
 
 #endif
