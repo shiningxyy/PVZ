@@ -8,7 +8,7 @@
 #include "ZombieFlag.h"
 #include "ZombieBucket.h"
 #include "Car.h"
-#include "MusicScene.h"
+#include "GameScene.h"
 
 USING_NS_CC;
 
@@ -21,7 +21,8 @@ public:
 
     // a selector callback
     void gamescene(cocos2d::Ref* pSender);
-    void musicscene(cocos2d::Ref* pSender);
+    void help(cocos2d::Ref* pSender);
+    void exit(Ref* pSender);
 
     CREATE_FUNC(MenuScene);
 };
