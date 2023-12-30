@@ -12,7 +12,7 @@ USING_NS_CC;
 #define  sunflower 1
 class SUN :public cocos2d::Sprite
 {
-protected:
+public:
     int num_sun;//屏幕上存在阳光的数量
     double time_sun;//阳光保留时间
     int collection;//收集到的阳光
