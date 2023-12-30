@@ -39,7 +39,7 @@ enum CardType {
 class Card :public Sprite {
 public:
 	//成员
-	double card_cd;//卡片冷却时间
+	float card_cd;//卡片冷却时间
 	Sprite* sprite;//精灵
 	Sprite* cd_sprite;
 	int sunnum;//阳光总量
@@ -49,6 +49,7 @@ public:
 	Rect rect;
 	bool cold;//判断冷却
 	CardType ct;//卡片类型
+
 	//函数
 	Card() = default;
 	~Card() = default;
@@ -56,9 +57,20 @@ public:
 	bool is_cold();//判断是否处于冷却状态
 	Rect getrect();//获取卡片范围
 	void getsun(int);//获取阳光数量
-	void sprite_init(std::string, Vec2);//初始化精灵
-	void cd_sprite_init(std::string, Vec2);
+
+	Sprite* sprite_init(const std::string name, Vec2 pos0) {
+		sprite = Sprite::create("card_" + name + ".png");
+		sprite->setPosition(pos0);
+		return sprite;
+	};//初始化精灵
+	Sprite* cd_sprite_init(const std::string name, Vec2 pos0) {
+		cd_sprite = Sprite::create("card_" + name + ".png");
+		cd_sprite->setPosition(pos0);
+		return cd_sprite;
+	};
 	virtual void card_init() {};
 	virtual void cold_animation() {};
 	virtual void move_animation(Vec2&);//卡片移动动画
+	virtual void set_cold(bool);//设置是否冷却
+	virtual void set_choose(bool);//设置是否冷却
 };

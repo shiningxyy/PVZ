@@ -1,19 +1,16 @@
 #include"card.h"
 
-void Card::sprite_init(std::string name, Vec2 pos)
-{
-	sprite = Sprite::create(name + "_card.png");
-	sprite->setPosition(pos);
 
-}
-void Card::cd_sprite_init(std::string name, Vec2 pos)
-{
-	cd_sprite = Sprite::create(name + "_card.png");
-	cd_sprite->setPosition(pos);
 
-}
+
 void Card::getsun(int s) {
 	sunnum = s;
+}
+void Card::set_cold(bool c) {
+	cold = c;
+}
+void Card::set_choose(bool c) {
+	choose = c;
 }
 bool Card::is_choose() {
 	return choose;
