@@ -8,7 +8,12 @@
 #include "ZombieFlag.h"
 #include "ZombieBucket.h"
 #include "Car.h"
+<<<<<<< Updated upstream
 #include "MusicScene.h"
+=======
+#include "GameScene.h"
+#include "GameScene2.h"
+>>>>>>> Stashed changes
 
 USING_NS_CC;
 
@@ -21,7 +26,12 @@ public:
 
     // a selector callback
     void gamescene(cocos2d::Ref* pSender);
+<<<<<<< Updated upstream
     void musicscene(cocos2d::Ref* pSender);
+=======
+    void gamescene2(cocos2d::Ref* pSender);
+    void exit(Ref* pSender);
+>>>>>>> Stashed changes
 
     CREATE_FUNC(MenuScene);
 };
