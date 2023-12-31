@@ -31,23 +31,9 @@ bool MenuScene::init()
     this->addChild(Menubackground, 0);
 
     auto startbutton = MenuItemImage::create(
-        "Menu/button.png",
-        "Menu/button.png",
+        "Menu/menu1.png",
+        "Menu/menu2.png",
         CC_CALLBACK_1(MenuScene::gamescene, this));
-<<<<<<< Updated upstream
-    auto musicbutton = MenuItemImage::create(
-        "Menu/button.png",
-        "Menu/button.png",
-        CC_CALLBACK_1(MenuScene::musicscene, this));
-    startbutton->setScale(1.1f);
-    startbutton->setPosition(Vec2(710, 460));
-    musicbutton->setScale(1.0f);
-    musicbutton->setPosition(Vec2(700, 300));
-    musicbutton->setRotation(2.0f);
-    auto menu = Menu::create(startbutton, NULL);
-    menu->setPosition(Vec2::ZERO);
-    menu->addChild(musicbutton);
-=======
     startbutton->setScale(1.25f);
     startbutton->setPosition(Vec2(720, 460));
 
@@ -58,8 +44,8 @@ bool MenuScene::init()
     startbutton2->setScale(1.25f);
     startbutton2->setPosition(Vec2(700, 260));
 
-    auto exitlabel = Label::createWithTTF("Exit","fonts/Marker Felt.ttf", 30);
-    auto exitbutton= MenuItemLabel::create(exitlabel, CC_CALLBACK_1(MenuScene::exit, this));
+    auto exitlabel = Label::createWithTTF("Exit", "fonts/Marker Felt.ttf", 30);
+    auto exitbutton = MenuItemLabel::create(exitlabel, CC_CALLBACK_1(MenuScene::exit, this));
     exitbutton->setPosition(Vec2(950, 40));
     exitbutton->setColor(Color3B(75, 75, 75));
 
@@ -67,23 +53,15 @@ bool MenuScene::init()
     menu->setPosition(Vec2::ZERO);
     menu->addChild(exitbutton);
     menu->addChild(startbutton2);
-
->>>>>>> Stashed changes
-    this->addChild(menu, 1);
+        this->addChild(menu, 1);
 
     return true;
 }
 
 
-void MenuScene::musicscene(Ref* pSender)
-{
-<<<<<<< Updated upstream
-    Director::getInstance()->pushScene(MusicScene::createScene());
-}
-
 void MenuScene::gamescene(Ref* pSender)
-=======
-    Director::getInstance()->replaceScene(GameScene::createScene());
+{
+Director::getInstance()->replaceScene(GameScene::createScene());
 }
 
 void MenuScene::gamescene2(Ref* pSender)
@@ -92,7 +70,6 @@ void MenuScene::gamescene2(Ref* pSender)
 }
 
 void MenuScene::exit(Ref* pSender)
->>>>>>> Stashed changes
 {
     Director::getInstance()->end();
 }

@@ -75,5 +75,3 @@ void Bullet::delete_sprite() {
     bulletsprite->runAction( RemoveSelf::create());
     
 }
-
-
