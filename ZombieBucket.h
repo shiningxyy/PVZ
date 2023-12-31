@@ -9,6 +9,8 @@ class ZombieBucket : public ZombieBase
 {
 public:
     virtual bool init();
+    /*    ZombieBucket();
+    virtual void zombie_init();*/
     void initmove();
     void initattack();
     void initdie();

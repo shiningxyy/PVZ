@@ -8,7 +8,7 @@ bool ZombieFlag::init()
 	{
 		return false;
 	}
-	type = zombieflag;
+	type = zombienormal;
 	hp = 100;
 	attack = 10;
 	moverate = 15;
@@ -17,62 +17,57 @@ bool ZombieFlag::init()
 	initmove();
 	initattack();
 	initdie();
-	scheduleUpdate();
+	this->scheduleUpdate();
 	return true;
 
 }
 
 void ZombieFlag::initmove()
 {
-	Animation* animation = Animation::create();
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_0.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_1.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_2.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_3.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_4.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_5.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_6.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_7.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_8.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_9.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_10.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Move/Zombie_11.png");
-	animation->setDelayPerUnit(0.08f);
-	moveaction = Animate::create(animation);
+	moveanimFrames.reserve(12);
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_0.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_1.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_2.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_3.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_4.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_5.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_6.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_7.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_8.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_9.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_10.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_11.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_12.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
 }
 void ZombieFlag::initattack()
 {
-	Animation* animation = Animation::create();
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_0.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_1.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_2.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_3.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_4.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_5.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_6.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_7.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_8.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_9.png");
-	animation->addSpriteFrameWithFile("FlagZombie/Attack/ZombieAttack_10.png");
-	animation->setDelayPerUnit(0.1f);
-	attackaction = Animate::create(animation);
+	attackanimFrames.reserve(11);
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_0.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_1.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_2.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_3.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_4.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_5.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_6.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_7.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_8.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_9.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
+	attackanimFrames.pushBack(SpriteFrame::create("FlagZombie/Attack/ZombieAttack_10.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
 }
 void ZombieFlag::initdie()
 {
-	Animation* animation = Animation::create();
-	animation->addSpriteFrameWithFile("NormalZombie/Die/01.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/01.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/02.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/03.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/04.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/05.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/06.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/07.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/08.png");
-	animation->addSpriteFrameWithFile("NormalZombie/Die/09.png");
-	animation->setDelayPerUnit(0.2f);
-	dieaction = Animate::create(animation);
+	dieanimFrames.reserve(8);
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/01.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/02.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/03.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/04.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/05.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/06.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/07.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/08.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
+	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/09.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
 }
+
 void ZombieFlag::update(float dt)
 {
 	if (hp <= 0) {

@@ -26,19 +26,19 @@ public:
     virtual double getstate() const;
     virtual ZombieType gettype() const;
     virtual void runaction();
-
+    void takedamagefromcar();
+    void takedamagefromplant(int value);
     CREATE_FUNC(ZombieBase);
 
-
-protected:
     Sprite* zombie;
     double hp;
     float moverate;
     int attack;
-    int state=2;
-    Animate* moveaction;
-    Animate* attackaction;
-    Animate* dieaction;
+    int state=1;
+    Vector<SpriteFrame*> moveanimFrames;
+    Vector<SpriteFrame*> attackanimFrames;
+    Vector<SpriteFrame*>dieanimFrames;
+
     ZombieType type;
     int row;
 };

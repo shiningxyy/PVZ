@@ -12,15 +12,14 @@ public:
 	void setrow(int);
 	int getstate() const;
 	void runaction();
-	virtual void update(float);
 	Vec2 getposition() const; 
 	float getx() const; 
 	float gety() const;
 	CREATE_FUNC(Car);
 
-protected:
+
 	Sprite* car;
-	int state; 
+	int state =0;
 	int row=0;
 };
 #endif // _CAR_H_

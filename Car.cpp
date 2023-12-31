@@ -9,7 +9,6 @@ bool Car::init()
 	}
 	car = Sprite::create("car.png");
 	this->addChild(car);
-	scheduleUpdate();
 	return true;
 }
 
@@ -27,22 +26,19 @@ int Car::getstate() const
 }
 void Car::runaction()
 {
-	car->runAction(Sequence::create(MoveBy::create(4, Vec2(1000, 0)),RemoveSelf::create(), nullptr));
+	this->runAction(Sequence::create(MoveBy::create(4, Vec2(1000, 0)), RemoveSelf::create(), nullptr));
 
 }
-void Car::update(float)
-{
-	;
-}
+
 Vec2 Car::getposition() const
 {
 	return this->getPosition();
 }
 float Car::getx() const
 {
-	return this->getPositionX();
+	return car->getPositionX();
 }
 float Car::gety() const
 {
-	return this->getPositionY();
+	return car->getPositionY();
 }
