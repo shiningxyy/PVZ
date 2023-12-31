@@ -26,6 +26,7 @@ void Bullet::bullet_explode() {
     animation->addSpriteFrameWithFile("peaexplode.png");
     animation->setDelayPerUnit(0.1f);
     bullet_explode_animate = Animate::create(animation);
+    bulletsprite->runAction(Repeat::create(bullet_explode_animate,1));
 }//如果撞到，爆炸动画
 
 void Bullet::bullet_move() {
