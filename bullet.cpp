@@ -26,18 +26,19 @@ void Bullet::bullet_explode() {
     animation->addSpriteFrameWithFile("peaexplode.png");
     animation->setDelayPerUnit(0.1f);
     bullet_explode_animate = Animate::create(animation);
+    bulletsprite->runAction(Repeat::create(bullet_explode_animate,1));
 }//如果撞到，爆炸动画
 
 void Bullet::bullet_move() {
-    bulletsprite->runAction(MoveTo::create(4.0f, Vec2(1000, position.y)));//一直移动
+    bulletsprite->runAction(MoveTo::create(3.0f, Vec2(1000, position.y)));//一直移动
 }
 
 void Bullet::sprite_init(const Vec2& pos) {
     // 初始化精灵
     bulletsprite = Sprite::create("pea.png");
-    
-    bulletsprite->setPosition(position);
     position = pos;
+    bulletsprite->setPosition(position);
+  
 }
 
 Vec2 Bullet::getposition() const {
