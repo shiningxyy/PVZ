@@ -13,4 +13,5 @@ public:
 	virtual void cold_animation();//¿¨Æ¬ÀäÈ´¶¯»­
 	virtual void update(float);
 	float timecount;//¼ÆÊ±Æ÷
+	
 };

@@ -27,11 +27,11 @@
 USING_NS_CC;
 
 enum PlantType {
+    NONE = -1,//√ª÷÷÷≤ŒÔ
     SUNFLOWER,//Ã´—Ùª®0
     PEASHOOTER,//Õ„∂π…‰ ÷1
     WALLNUT,//º·π˚«Ω2
-    SQUASH,//Œ—πœ3
-    CHERRYBOMB//”£Ã“’®µØ4
+    CHERRYBOMB//”£Ã“’®µØ3
 };
 
 class Plant :public Sprite {
@@ -60,8 +60,8 @@ public:
     virtual float get_rate();
     virtual int get_row() { return row; };
     virtual int get_col() { return col; };
-    virtual int get_x() { return pos.x; };
-    virtual int get_y() { return pos.y; };
+    virtual float get_x() { return pos.x; };
+    virtual float get_y() { return pos.y; };
     virtual Vec2 get_pos() { return pos; };
     virtual Rect get_rect();
 private:

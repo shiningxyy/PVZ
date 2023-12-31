@@ -11,7 +11,7 @@ void Wallnutcard::update(float tim) {
 	}
 }
 void Wallnutcard::card_init() {
-	card_cd = 20;//ÀäÈ´Ê±¼ä20s
+	card_cd = 50;//ÀäÈ´Ê±¼ä20s
 	cost = 50;//50Ì«Ñô
 	cold = false;//²»ÔÚÀäÈ´×´Ì¬
 	ct = WALLNUT_CARD;
@@ -19,6 +19,6 @@ void Wallnutcard::card_init() {
 void Wallnutcard::cold_animation() {
 	auto cd1 = FadeOut::create(0.1);
 	auto cd2 = FadeIn::create(card_cd);
-	auto cd_seq = Sequence::create(cd1, cd2);
+	auto cd_seq = Sequence::create(cd1, cd2, nullptr);
 	this->sprite->runAction(cd_seq);
 }

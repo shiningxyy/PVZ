@@ -60,7 +60,7 @@ public:
 
 	Sprite* sprite_init(const std::string name, Vec2 pos0) {
 		sprite = Sprite::create("card_" + name + ".png");
-		sprite->setScale(0.5f);
+		//sprite->setScale(0.9f);
 		sprite->setPosition(pos0);
 		pos = pos0;
 		return sprite;

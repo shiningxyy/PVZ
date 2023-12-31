@@ -11,7 +11,7 @@ void Cherrybombcard::update(float tim) {
 	}
 }
 void Cherrybombcard::card_init() {
-	card_cd = 10;//ÀäÈ´Ê±¼ä20s
+	card_cd = 20;//ÀäÈ´Ê±¼ä20s
 	cost = 125;//125Ì«Ñô
 	cold = false;//²»ÔÚÀäÈ´×´Ì¬
 	ct = CHERRYBOMB_CARD;
@@ -19,6 +19,6 @@ void Cherrybombcard::card_init() {
 void Cherrybombcard::cold_animation() {
 	auto cd1 = FadeOut::create(0.1);
 	auto cd2 = FadeIn::create(card_cd);
-	auto cd_seq = Sequence::create(cd1, cd2);
+	auto cd_seq = Sequence::create(cd1, cd2, nullptr);
 	this->sprite->runAction(cd_seq);
 }

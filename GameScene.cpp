@@ -44,7 +44,7 @@ bool GameScene::init()
 	listener->onTouchBegan = CC_CALLBACK_2(GameScene::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(GameScene::onTouchMoved, this);
 	listener->onTouchEnded = CC_CALLBACK_2(GameScene::onTouchEnded, this);
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
 	{//创建植物卡片
 		Sunflowercard* c1 = new Sunflowercard;
@@ -59,16 +59,11 @@ bool GameScene::init()
 		c3->sprite_init("wallnut", Vec2(225, 555));
 		this->addChild(c3->sprite, 2);
 		cards.push_back(c3);
-		Squashcard* c4 = new Squashcard;
-		c4->sprite_init("squash", Vec2(285, 555));
+		Cherrybombcard* c4 = new Cherrybombcard;
+		c4->sprite_init("cherrybomb", Vec2(285, 555));
 		this->addChild(c4->sprite, 2);
 		cards.push_back(c4);
-		Cherrybombcard* c5 = new Cherrybombcard;
-		c5->sprite_init("cherrybomb", Vec2(345, 555));
-		this->addChild(c5->sprite, 2);
-		cards.push_back(c5);
 	}
-
     return true;
 }
 
@@ -82,12 +77,14 @@ void GameScene::menuscene(Ref* pSender)
     Director::getInstance()->popScene();
 }
 
+
 bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 {
 	auto touchpos = touch->getLocation();
-
-	for (auto& t : cards) {
-		if (t->is_cold() || mouse_s != nullptr)//还在冷却，该卡不可选
+	
+	for (int i = 0; i < 4;i++) {
+		auto t = cards[i];
+		if (t->cold==true || mouse_s != nullptr)//还在冷却，该卡不可选
 			continue;
 		double w = t->sprite->getContentSize().width / 2;
 		double h = t->sprite->getContentSize().height / 2;
@@ -98,11 +95,13 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 		{
 			switch (t->ct)
 			{
-			
+
 			case SUNFLOWER_CARD:
 			{
 				Sunflower* sunf = new Sunflower;
-				mouse_s = sunf->run_animation(t->sprite->getPosition());
+				mouse_s = Sprite::create("SunFlower/SunFlower_0.png");
+				mouse_s->setPosition(t->sprite->getPosition());
+				//mouse_s = sunf->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::SUNFLOWER;
 				break;
@@ -110,7 +109,9 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 			case PEASHOOTER_CARD:
 			{
 				Peashooter* pea = new Peashooter;
-				mouse_s = pea->run_animation(t->sprite->getPosition());
+				mouse_s = Sprite::create("Peashooter/Peashooter_0.png");
+				mouse_s->setPosition(t->sprite->getPosition());
+				//mouse_s = pea->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::PEASHOOTER;
 				break;
@@ -118,23 +119,19 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 			case WALLNUT_CARD:
 			{
 				Wallnut* wal = new Wallnut;
-				mouse_s = wal->run_animation(t->sprite->getPosition());
+				mouse_s = Sprite::create("WallNut/WallNut_0.png");
+				mouse_s->setPosition(t->sprite->getPosition());
+				//mouse_s = wal->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::WALLNUT;
 				break;
 			}
-			case SQUASH_CARD:
-			{
-				Squash* squ = new Squash;
-				mouse_s = squ->run_animation(t->sprite->getPosition());
-				this->addChild(mouse_s, 1);
-				ptype = PlantType::SQUASH;
-				break;
-			}
 			case CHERRYBOMB_CARD:
 			{
-				Peashooter* che = new Peashooter;
-				mouse_s = che->run_animation(t->sprite->getPosition());
+				Cherrybomb* che = new Cherrybomb;
+				mouse_s = Sprite::create("CherryBomb/CherryBomb_0.png");
+				mouse_s->setPosition(t->sprite->getPosition());
+				//mouse_s = che->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::CHERRYBOMB;
 				break;
@@ -160,23 +157,145 @@ void GameScene::onTouchMoved(Touch* touch, Event* event) {
 		else
 			mouse_s->setPosition(touch->getLocation());
 	}
-	
+
 }
 
 void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 {
-	//鼠标位置在格子上!
-	
 	if (mouse_s != nullptr && ptype != NONE) {
 		int row, col;
+		Vec2 ppos = touch->getLocation();
 		mouse_s->setPosition(touch->getLocation());
-		if (compete_row_col(touch->getLocation(), row, col)) {
+		compete_row_col(touch->getLocation(), row, col); {
 			//该位置无植物!
-			plant(row, col, ptype);
+			//plant(row, col, ptype);
+			compete_plant_pos();
+		Vec2 plantpos = plant_pos[row][col];
+		Plant* tempplant = NULL;	
+		switch (ptype) {
+		case SUNFLOWER:
+			tempplant = new Sunflower;
+			tempplant->set_type(SUNFLOWER);
+			{
+				auto mySprite = Sprite::create("SunFlower/SunFlower_0.png");
+				mySprite->setPosition(ppos);
+				this->addChild(mySprite, 0);
+				Vector<SpriteFrame*> animFrames;
+				animFrames.reserve(18);
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_0.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_1.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_2.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_3.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_4.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_5.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_6.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_7.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_8.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_9.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_10.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_11.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_12.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_13.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_14.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_15.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_16.png", Rect(0, 0, 64, 90)));
+				animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_17.png", Rect(0, 0, 64, 90)));
+				Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+				Animate* animate = Animate::create(animation);
+				mySprite->runAction(RepeatForever::create(animate));
+			}
+			//this->addChild(tempplant->run_animation(plantpos));
+			break;
+		case PEASHOOTER:
+			tempplant = new Peashooter;
+			tempplant->set_type(PEASHOOTER);
+			{
+				Vector<SpriteFrame*> animFrames;
+				auto mySprite = Sprite::create("Peashooter/Peashooter_0.png");
+				mySprite->setPosition(ppos);
+				this->addChild(mySprite, 0);
+				animFrames.reserve(13);
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_0.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_1.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_2.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_3.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_4.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_5.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_6.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_7.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_8.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_9.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_10.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_11.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_12.png", Rect(0, 0, 80, 90)));
+				Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+				Animate* animate = Animate::create(animation);
+				mySprite->runAction(RepeatForever::create(animate));
+			}
+			//this->addChild(tempplant->run_animation(plantpos));
+			break;
+		case WALLNUT:
+			tempplant = new Wallnut;
+			tempplant->set_type(WALLNUT);
+			{
+				Vector<SpriteFrame*> animFrames;
+				auto mySprite = Sprite::create("WallNut/WallNut_0.png");
+				mySprite->setPosition(ppos);
+				this->addChild(mySprite, 0);
+				animFrames.reserve(16);
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_0.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_1.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_2.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_3.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_4.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_5.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_6.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_7.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_8.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_9.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_10.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_11.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_12.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_13.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_14.png", Rect(0, 0, 80, 90)));
+				animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_15.png", Rect(0, 0, 80, 90)));
+				Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+				Animate* animate = Animate::create(animation);
+				mySprite->runAction(RepeatForever::create(animate));
+			}
+			//this->addChild(tempplant->run_animation(plantpos));
+			break;
+		case CHERRYBOMB:
+			tempplant = new Cherrybomb;
+			tempplant->set_type(CHERRYBOMB);
+			{
+				Vector<SpriteFrame*> animFrames;
+				auto mySprite = Sprite::create("CherryBomb/CherryBomb_0.png");
+				mySprite->setPosition(ppos);
+				mySprite->setScale(0.9f);
+				this->addChild(mySprite, 0);
+				animFrames.reserve(7);
+				animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_0.png", Rect(0, 0, 110, 90)));
+				animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_1.png", Rect(0, 0, 110, 90)));
+				animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_2.png", Rect(0, 0, 110, 90)));
+				animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_3.png", Rect(0, 0, 110, 90)));
+				animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_4.png", Rect(0, 0, 110, 90)));
+				animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_5.png", Rect(0, 0, 110, 90)));
+				animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_6.png", Rect(0, 0, 110, 90)));
+				Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+				Animate* animate = Animate::create(animation);
+				mySprite->runAction(RepeatForever::create(animate));
+			}
+			//this->addChild(tempplant->run_animation(plantpos));
+			break;
+		default:
+			break;
+		}
+		
 		}
 		ptype = NONE;
 	}
-	
+
 	this->removeChild(mouse_s, 1);
 	mouse_s = nullptr;
 
@@ -204,8 +323,10 @@ void GameScene::compete_plant_pos() {
 	for(int i=0;i<5;i++)
 		for (int j = 0; j < 9; j++)
 		{
-			float x = 0.15f * i + 0.15f, y = 0.09f * j + 0.21f;
-			plant_pos[i][j] = Vec2(visibleSize.width * y, visibleSize.height * x);
+			//float x = 0.15f * i + 0.15f, y = 0.09f * j + 0.21f;
+			
+			//plant_pos[i][j] = Vec2(visibleSize.width * y, visibleSize.height * x);
+			plant_pos[i][j] = Vec2(10*i, 10*j);
 		}
 }
 
@@ -222,19 +343,15 @@ void GameScene::plant(int row, int col, PlantType pt) {
 		break;
 	case PEASHOOTER:
 		tempcard = cards[1];
-		index == 1;
+		index = 1;
 		break;
 	case WALLNUT:
 		tempcard = cards[2];
 		index = 2;
 		break;
-	case SQUASH:
+	case CHERRYBOMB:
 		tempcard = cards[3];
 		index = 3;
-		break;
-	case CHERRYBOMB:
-		tempcard = cards[4];
-		index = 4;
 		break;
 	default:
 		break;
@@ -250,27 +367,117 @@ void GameScene::plant(int row, int col, PlantType pt) {
 			case SUNFLOWER:
 				tempplant = new Sunflower;
 				tempplant->set_type(SUNFLOWER);
-				this->addChild(tempplant->run_animation(plantpos));
+				{
+					auto mySprite = Sprite::create("SunFlower/SunFlower_0.png");
+					mySprite->setPosition(plantpos);
+					this->addChild(mySprite, 0);
+					Vector<SpriteFrame*> animFrames;
+					animFrames.reserve(18);
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_0.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_1.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_2.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_3.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_4.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_5.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_6.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_7.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_8.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_9.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_10.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_11.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_12.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_13.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_14.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_15.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_16.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_17.png", Rect(0, 0, 64, 90)));
+					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+					Animate* animate = Animate::create(animation);
+					mySprite->runAction(RepeatForever::create(animate));
+				}
+				//this->addChild(tempplant->run_animation(plantpos));
 				break;
 			case PEASHOOTER:
 				tempplant = new Peashooter;
 				tempplant->set_type(PEASHOOTER);
-				this->addChild(tempplant->run_animation(plantpos));
+				{
+					Vector<SpriteFrame*> animFrames;
+					auto mySprite = Sprite::create("Peashooter/Peashooter_0.png");
+					mySprite->setPosition(plantpos);
+					this->addChild(mySprite, 0);
+					animFrames.reserve(13);
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_0.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_1.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_2.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_3.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_4.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_5.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_6.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_7.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_8.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_9.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_10.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_11.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_12.png", Rect(0, 0, 80, 90)));
+					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+					Animate* animate = Animate::create(animation);
+					mySprite->runAction(RepeatForever::create(animate));
+				}
+				//this->addChild(tempplant->run_animation(plantpos));
 				break;
 			case WALLNUT:
 				tempplant = new Wallnut;
 				tempplant->set_type(WALLNUT);
-				this->addChild(tempplant->run_animation(plantpos));
-				break;
-			case SQUASH:
-				tempplant = new Squash;
-				tempplant->set_type(SQUASH);
-				this->addChild(tempplant->run_animation(plantpos));
+				{
+					Vector<SpriteFrame*> animFrames;
+					auto mySprite = Sprite::create("WallNut/WallNut_0.png");
+					mySprite->setPosition(plantpos);
+					this->addChild(mySprite, 0);
+					animFrames.reserve(16);
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_0.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_1.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_2.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_3.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_4.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_5.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_6.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_7.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_8.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_9.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_10.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_11.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_12.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_13.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_14.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_15.png", Rect(0, 0, 80, 90)));
+					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+					Animate* animate = Animate::create(animation);
+					mySprite->runAction(RepeatForever::create(animate));
+				}
+				//this->addChild(tempplant->run_animation(plantpos));
 				break;
 			case CHERRYBOMB:
 				tempplant = new Cherrybomb;
 				tempplant->set_type(CHERRYBOMB);
-				this->addChild(tempplant->run_animation(plantpos));
+				{
+					Vector<SpriteFrame*> animFrames;
+					auto mySprite = Sprite::create("CherryBomb/CherryBomb_0.png");
+					mySprite->setPosition(plantpos);
+					mySprite->setScale(0.9f);
+					this->addChild(mySprite, 0);
+					animFrames.reserve(7);
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_0.png", Rect(0, 0, 110, 90)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_1.png", Rect(0, 0, 110, 90)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_2.png", Rect(0, 0, 110, 90)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_3.png", Rect(0, 0, 110, 90)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_4.png", Rect(0, 0, 110, 90)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_5.png", Rect(0, 0, 110, 90)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_6.png", Rect(0, 0, 110, 90)));
+					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
+					Animate* animate = Animate::create(animation);
+					mySprite->runAction(RepeatForever::create(animate));
+				}
+				//this->addChild(tempplant->run_animation(plantpos));
 				break;
 			default:
 				break;
