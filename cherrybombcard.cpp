@@ -17,8 +17,10 @@ void Cherrybombcard::card_init() {
 	ct = CHERRYBOMB_CARD;
 }
 void Cherrybombcard::cold_animation() {
+	//cold = true;
 	auto cd1 = FadeOut::create(0.1);
 	auto cd2 = FadeIn::create(card_cd);
 	auto cd_seq = Sequence::create(cd1, cd2, nullptr);
 	this->sprite->runAction(cd_seq);
+	cold = false;
 }

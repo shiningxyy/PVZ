@@ -17,8 +17,10 @@ void Wallnutcard::card_init() {
 	ct = WALLNUT_CARD;
 }
 void Wallnutcard::cold_animation() {
+
 	auto cd1 = FadeOut::create(0.1);
 	auto cd2 = FadeIn::create(card_cd);
 	auto cd_seq = Sequence::create(cd1, cd2, nullptr);
 	this->sprite->runAction(cd_seq);
+	cold = false;
 }

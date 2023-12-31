@@ -25,15 +25,14 @@
 #include "cocos2d.h"
 #include<string>
 #include "ui/CocosGUI.h"
-#include"plant.h"
+//#include"plant.h"
 USING_NS_CC;
 
 enum CardType {
 	SUNFLOWER_CARD,//Ã´—Ùª®0
 	PEASHOOTER_CARD,//Õ„∂π…‰ ÷1
 	WALLNUT_CARD,//º·π˚«Ω2
-	SQUASH_CARD,//Œ—πœ3
-	CHERRYBOMB_CARD//”£Ã“’®µØ4
+	CHERRYBOMB_CARD//”£Ã“’®µØ3
 };
 
 class Card :public Sprite {
