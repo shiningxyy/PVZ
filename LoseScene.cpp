@@ -26,8 +26,8 @@ bool LoseScene::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     auto Menubackground = Sprite::create("GameLoose.png");
-    Menubackground->setScale(1.35f);
-    Menubackground->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y - 100));
+    Menubackground->setScale(1.0f);
+    Menubackground->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ));
     this->addChild(Menubackground, 0);
 
     auto closebutton = MenuItemImage::create(
