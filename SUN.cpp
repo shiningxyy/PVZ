@@ -8,7 +8,7 @@ SUN::SUN() {
     time_sun=0.0;//阳光保留时间
     collection=0;//收集到的阳光
     sunsprite = Sprite::create("sun.png");//用太阳图片创建spirit
-    this->scheduleUpdate();
+    
     //Layer::getInstance()->addChild(spSun, 202);
 }
 SUN::SUN(int producedby) {
@@ -16,7 +16,7 @@ SUN::SUN(int producedby) {
     time_sun = 0.0;//阳光保留时间
     collection = 0;//收集到的阳光
     sunsprite = Sprite::create("sun.png");//用太阳图片创建spirit
-    this->scheduleUpdate();
+  
     if (producedby == sky) {
         producesun();
         num_sun++;
@@ -28,6 +28,7 @@ SUN::SUN(int producedby) {
 SUN::~SUN() {
 }
 void SUN::jump(Vec2& position_) {
+    sunsprite->setScale(0.2f);
     sunsprite->setPosition(position_.x, position_.y);
     auto fadeIn = FadeIn::create(1.0f);
     sunsprite->runAction(fadeIn);
@@ -45,12 +46,9 @@ void SUN::producesun() {
 }
 void SUN::move_1() {
 
-    auto _mouseListener = EventListenerMouse::create();
-    //_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::collected_callback, sunsprite);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, sunsprite);
-
+   
     Vec2 position = sunsprite->getPosition();
-    auto moveTo = MoveTo::create(2, Vec2(position.x, 20));
+    auto moveTo = MoveTo::create(2, Vec2(position.x, 30));
 
     auto rotateBy = RotateBy::create(2.0f, 360.0f);//规定的时间（？），除法
 
@@ -60,13 +58,11 @@ void SUN::move_1() {
 } //掉落+旋转（animate）+停止
 
 void SUN::move_2() {
-    auto recreateSprite = CallFunc::create([this]() {
-        sunsprite = Sprite::create("sun.png");
-        });
+  
     sunsprite->setScale(0.2f);
-    auto moveToup = MoveTo::create(2, Vec2(0, Y_MAX));
-    auto scaleTo = ScaleTo::create(2.0f, 0.1f);
-    auto fadeOut = FadeOut::create(2.0f);
+    auto moveToup = MoveTo::create(1.5f, Vec2(40, Y_MAX-35));
+    auto scaleTo = ScaleTo::create(1.0f, 0.1f);
+    auto fadeOut = FadeOut::create(1.0f);
     auto removeSelf = RemoveSelf::create();
   
 
@@ -83,10 +79,10 @@ void SUN::onMouseDown(Event* event)
    // auto ui = this->getChildByTag(666);
    // auto button = ui->getChildByTag(4);
     //获取鼠标事件触发的坐标->限定按钮范围
-   /*if (e->getCursorX() >= sunsprite->getPosition() - 100 && e->getCursorX() <= sunsprite->getPositionX() + 100
-        && e->getCursorY() >= sunsprite->getPositionY() - 60 && e->getCursorY() <= sunsprite->getPositionY() + 60)*/ 
-    if (e->getCursorX() >= 0 && e->getCursorX() <= X_MAX
-        && e->getCursorY() >= 0 && e->getCursorY() <= Y_MAX)
+   if (e->getCursorX() >= sunsprite->getPositionX() - 100 && e->getCursorX() <= sunsprite->getPositionX() + 100
+        && e->getCursorY() >= sunsprite->getPositionY() - 60 && e->getCursorY() <= sunsprite->getPositionY() + 60)
+    /*if (e->getCursorX() >= 0 && e->getCursorX() <= X_MAX
+        && e->getCursorY() >= 0 && e->getCursorY() <= Y_MAX)*/
     {
         move_2();
         collection++;
