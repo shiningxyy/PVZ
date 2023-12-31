@@ -64,6 +64,15 @@ bool GameScene::init()
 		this->addChild(c4->sprite, 2);
 		cards.push_back(c4);
 	}
+	{//创建汽车
+		for (int i = 0; i < 5; i++) {
+			Vec2 carpos = Vec2(200, 100 * (i + 1));
+			Car* tempcar = new Car;
+			tempcar->sprite_init(carpos);
+			this->addChild(tempcar, 2);
+			cars.push_back(tempcar);
+		}
+	}
     return true;
 }
 
@@ -76,7 +85,6 @@ void GameScene::menuscene(Ref* pSender)
 {
     Director::getInstance()->popScene();
 }
-
 
 bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 {
@@ -98,42 +106,50 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 
 			case SUNFLOWER_CARD:
 			{
+				t->cold = true;
 				Sunflower* sunf = new Sunflower;
 				mouse_s = Sprite::create("SunFlower/SunFlower_0.png");
 				mouse_s->setPosition(t->sprite->getPosition());
 				//mouse_s = sunf->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::SUNFLOWER;
+				t->cold_animation();
 				break;
 			}
 			case PEASHOOTER_CARD:
 			{
+				t->cold = true;
 				Peashooter* pea = new Peashooter;
 				mouse_s = Sprite::create("Peashooter/Peashooter_0.png");
 				mouse_s->setPosition(t->sprite->getPosition());
 				//mouse_s = pea->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::PEASHOOTER;
+				t->cold_animation();
 				break;
 			}
 			case WALLNUT_CARD:
 			{
+				t->cold = true;
 				Wallnut* wal = new Wallnut;
 				mouse_s = Sprite::create("WallNut/WallNut_0.png");
 				mouse_s->setPosition(t->sprite->getPosition());
 				//mouse_s = wal->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::WALLNUT;
+				t->cold_animation();
 				break;
 			}
 			case CHERRYBOMB_CARD:
 			{
+				t->cold = true;
 				Cherrybomb* che = new Cherrybomb;
 				mouse_s = Sprite::create("CherryBomb/CherryBomb_0.png");
 				mouse_s->setPosition(t->sprite->getPosition());
 				//mouse_s = che->run_animation(t->sprite->getPosition());
 				this->addChild(mouse_s, 1);
 				ptype = PlantType::CHERRYBOMB;
+				t->cold_animation();
 				break;
 			}
 			default:
@@ -167,10 +183,6 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 		Vec2 ppos = touch->getLocation();
 		mouse_s->setPosition(touch->getLocation());
 		compete_row_col(touch->getLocation(), row, col); {
-			//该位置无植物!
-			//plant(row, col, ptype);
-			compete_plant_pos();
-		Vec2 plantpos = plant_pos[row][col];
 		Plant* tempplant = NULL;	
 		switch (ptype) {
 		case SUNFLOWER:
@@ -179,6 +191,7 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 			{
 				auto mySprite = Sprite::create("SunFlower/SunFlower_0.png");
 				mySprite->setPosition(ppos);
+				sunflowerpos.push_back(ppos);//把太阳花的坐标存起来
 				this->addChild(mySprite, 0);
 				Vector<SpriteFrame*> animFrames;
 				animFrames.reserve(18);
@@ -213,6 +226,7 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 				Vector<SpriteFrame*> animFrames;
 				auto mySprite = Sprite::create("Peashooter/Peashooter_0.png");
 				mySprite->setPosition(ppos);
+				peashooterpos.push_back(ppos);//把豌豆射手的坐标存起来
 				this->addChild(mySprite, 0);
 				animFrames.reserve(13);
 				animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_0.png", Rect(0, 0, 80, 90)));

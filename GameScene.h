@@ -44,6 +44,9 @@ public:
 
     std::vector<Card*>cards;
     std::vector<Plant*>plants;
+    std::vector<Car*>cars;
+    std::vector<Vec2>sunflowerpos;//向日葵坐标
+    std::vector<Vec2>peashooterpos;
     Vec2 plant_pos[5][9];
     void compete_plant_pos();//根据行和列计算Vec2
     bool compete_row_col(Vec2 vpos,int&row,int&col);//根据Vec2计算行和列
