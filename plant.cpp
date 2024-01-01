@@ -71,11 +71,11 @@ void Plant::init_animation() {}
 void Plant::set_size(double s) {
     this->sprite->setScale(s);
 }
-void Plant::set_rate(float r) {
-    rate = r;
+void Plant::set_rate(double r) {
+    rate_time = r;
 }
-float Plant::get_rate() {
-    return rate;
+double Plant::get_rate() {
+    return rate_time;
 }
 Rect Plant::get_rect() {
     //×óÉÏ½Çx×ø±ê

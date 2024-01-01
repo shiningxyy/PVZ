@@ -12,9 +12,10 @@ void Cherrybombcard::update(float tim) {
 }
 void Cherrybombcard::card_init() {
 	card_cd = 20;//ÀäÈ´Ê±¼ä20s
-	cost = 125;//125Ì«Ñô
+	cost = 150;//125Ì«Ñô
 	cold = false;//²»ÔÚÀäÈ´×´Ì¬
 	ct = CHERRYBOMB_CARD;
+	time_count = 0;
 }
 void Cherrybombcard::cold_animation() {
 	//cold = true;

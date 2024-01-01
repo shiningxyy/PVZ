@@ -15,6 +15,7 @@ void Peashootercard::card_init() {
 	cost = 100;//50Ì«Ñô
 	cold = false;//²»ÔÚÀäÈ´×´Ì¬
 	ct = PEASHOOTER_CARD;
+	time_count = 0;
 }
 void Peashootercard::cold_animation() {
 	//cold = true;
@@ -22,5 +23,5 @@ void Peashootercard::cold_animation() {
 	auto cd2 = FadeIn::create(card_cd);
 	auto cd_seq = Sequence::create(cd1, cd2, nullptr);
 	this->sprite->runAction(cd_seq);
-	cold = false;
+	//cold = false;
 }

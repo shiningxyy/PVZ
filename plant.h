@@ -56,14 +56,19 @@ public:
     virtual Sprite* run_animation(Vec2);//植物种下后的动画
     virtual Animate* get_animation() { return panimate; };
     virtual void set_size(double);//设置大小
-    virtual void set_rate(float);
-    virtual float get_rate();
+    virtual void set_rate(double);
+    virtual double get_rate();
     virtual int get_row() { return row; };
     virtual int get_col() { return col; };
     virtual float get_x() { return pos.x; };
     virtual float get_y() { return pos.y; };
     virtual Vec2 get_pos() { return pos; };
     virtual Rect get_rect();
+    virtual Sprite* get_sprite() { return this->sprite; };
+    double time_count;
+    double rate_time;
+    int row;
+    int col;
 private:
     int blood;//血量
     bool planted;//是否被种植
@@ -75,7 +80,7 @@ private:
     Vec2 pos;//位置
     Rect rect;
     float interval;//时间间隔
-    float rate;//触发技能间隔
-    int row;
-    int col;
+ 
+   
+   
 };

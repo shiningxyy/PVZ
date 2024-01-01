@@ -9,7 +9,7 @@ void Sunflower::init_plant() {
 	set_rate(SUNFLOWER_RATE);
 }
 
-void Sunflower::delete_() {
+void Sunflower::update(float uptime) {
 	if (get_blood() <= 0)
 	{
 		removeFromParent();

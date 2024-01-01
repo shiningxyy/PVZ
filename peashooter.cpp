@@ -2,16 +2,16 @@
 
 
 
-void Peashooter::delete_(float tim) {
+void Peashooter::update(float uptime) {
 	if (get_blood() <= 0) {
 		removeFromParent();
 		this->unscheduleUpdate();
 	}
 	else {
-		this->set_interval(tim);
+		this->set_interval(uptime);
 		if (this->get_interval() > this->get_rate()) {
 			this->set_interval(-this->get_interval());
-			is_shoot(true);
+			this->is_shoot(true);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 #include"wallnut.h"
 
 
-void Wallnut::delete_() {
+void Wallnut::update(float uptime) {
 	if (get_blood() <= 0)
 	{
 		removeFromParent();

@@ -15,6 +15,7 @@ void Sunflowercard::card_init() {
 	cost = 50;//50Ì«Ñô
 	cold = false;//²»ÔÚÀäÈ´×´Ì¬
 	ct = SUNFLOWER_CARD;
+	time_count = 0;
 }
 void Sunflowercard::cold_animation() {
 	//cold = true;
@@ -22,5 +23,5 @@ void Sunflowercard::cold_animation() {
 	auto cd2 = FadeIn::create(card_cd);
 	auto cd_seq = Sequence::create(cd1, cd2,nullptr);
 	this->sprite->runAction(cd_seq);
-	cold = false;
+	//cold = false;
 }

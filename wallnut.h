@@ -10,6 +10,6 @@ public:
 	~Wallnut() = default;
 	virtual void init_plant();//初始化植物属性
 	virtual void init_animation();//植物动画
-	virtual void delete_();//删除植物
+	virtual void update(float uptime);//删除植物
 	
 };

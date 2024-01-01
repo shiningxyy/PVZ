@@ -49,6 +49,7 @@ public:
 	bool cold;//ÅĞ¶ÏÀäÈ´
 	CardType ct;//¿¨Æ¬ÀàĞÍ
 	Vec2 pos;
+	double time_count;
 	//º¯Êı
 	Card() = default;
 	~Card() = default;

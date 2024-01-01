@@ -1,8 +1,6 @@
 #include"cherrybomb.h"
 
-
-
-void Cherrybomb::delete_() {
+void Cherrybomb::update(float uptime) {
 	if (get_blood() <= 0) {
 		is_shoot(true);
 		removeFromParent();
