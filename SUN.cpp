@@ -84,6 +84,7 @@ void SUN::onMouseDown(Event* event)
     /*if (e->getCursorX() >= 0 && e->getCursorX() <= X_MAX
         && e->getCursorY() >= 0 && e->getCursorY() <= Y_MAX)*/
     {
+       stopAllActions();
         move_2();
         collection++;
         num_sun--;
