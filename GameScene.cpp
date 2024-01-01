@@ -1,6 +1,6 @@
 #include "GameScene.h"
-int sunnumber = 0;
 
+int total_collection = 0;
 Scene* GameScene::createScene()
 {
     return GameScene::create();
@@ -58,15 +58,17 @@ bool GameScene::init()
 	createplant();
 
 	{//生成初始阳光
-		sun = new SUN(sky);
-		this->addChild(sun->sunsprite, 3);
-		sun->start_move();  // 生成阳光并下落
+		SUN* new_sun = new SUN(sunflower);
+		new_sun->sunsprite->setScale(0.2f);
+		this->addChild(new_sun->sunsprite, 3);
+		suns.push_back(new_sun);
+		new_sun->start_move();  // 生成阳光并下落
 		//sun->jump(Vec2(400, 90));//给坐标，直接有阳光
 		auto _mouseListener = EventListenerMouse::create();
-		_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, sun);
+		_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-
-		sun_num = Label::createWithTTF(std::to_string((sun->collection) * 25), "fonts/Marker Felt.ttf", 24);
+		total_collection = suns.size() * 25;
+		sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
 		this->addChild(sun_num, 5);
 		sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 		sun_num->enableShadow();
@@ -159,24 +161,23 @@ void GameScene::createcar() {
 
 	 if (producetime >= 10.0) {
 		 producetime = 0;
-		 sun = new SUN(sky);
-		 this->addChild(sun->sunsprite, 3);
-		 sun->start_move();  // 生成阳光并下落
+		 SUN* new_sun = new SUN(sunflower);
+		 new_sun->sunsprite->setScale(0.2f);
+		 this->addChild(new_sun->sunsprite, 3);
+		 suns.push_back(new_sun);
+
+		 new_sun->start_move();  // 生成阳光并下落
 		 //sun->jump(Vec2(400, 90));//给坐标，直接有阳光
 		 auto _mouseListener = EventListenerMouse::create();
-		 _mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, sun);
+		 _mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
 		 _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-		 sunnumber += sun->collection;
-		 sun_num = Label::createWithTTF(std::to_string((25)), "fonts/Marker Felt.ttf", 24);
+		 
+		
+		 total_collection = suns.size()*25;
+		 sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
 		 this->addChild(sun_num, 5);
 		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 		 sun_num->enableShadow();
-		 if (sunnumber > 0) {
-		 sun_num = Label::createWithTTF(std::to_string((sunnumber)*25), "fonts/Marker Felt.ttf", 24);
-		 this->addChild(sun_num, 5);
-		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
-		 sun_num->enableShadow();
-	 }
 	 }
 	 
 }
@@ -432,16 +433,18 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
 					{
-						sun = new SUN(sunflower);
-						sun->sunsprite->setScale(0.2f);
-						this->addChild(sun->sunsprite, 3);
-						
+						SUN* new_sun = new SUN(sunflower);
+						new_sun->sunsprite->setScale(0.2f);
+						this->addChild(new_sun->sunsprite, 3);
+						suns.push_back(new_sun);
 						//sun->start_move();  // 生成阳光并下落
-						sun->jump(ppos);//给坐标，直接有阳光
+						new_sun->jump(ppos);//给坐标，直接有阳光
 						auto _mouseListener = EventListenerMouse::create();
-						_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, sun);
+						_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
 						_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-						sun_num = Label::createWithTTF(std::to_string((sun->collection) * 25), "fonts/Marker Felt.ttf", 24);
+						total_collection = suns.size() * 25;
+						sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
+						
 						this->addChild(sun_num, 5);
 						sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 						sun_num->enableShadow();

@@ -67,7 +67,7 @@ public:
     void compete_plant_pos();//根据行和列计算Vec2
     bool compete_row_col(Vec2 vpos, int& row, int& col);//根据Vec2计算行和列
     double producetime;
-    SUN* sun;
+    std::vector<SUN*> suns;
     Label* sun_num;
 };
 
