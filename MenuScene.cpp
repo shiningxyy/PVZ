@@ -21,7 +21,7 @@ bool MenuScene::init()
     {
         return false;
     }
-
+    AudioEngine::stopAll();
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -37,15 +37,23 @@ bool MenuScene::init()
     startbutton->setScale(1.25f);
     startbutton->setPosition(Vec2(720, 460));
 
-    auto exitlabel = Label::createWithTTF("Exit","fonts/Marker Felt.ttf", 30);
-    auto exitbutton= MenuItemLabel::create(exitlabel, CC_CALLBACK_1(MenuScene::exit, this));
+    auto startbutton2 = MenuItemImage::create(
+        "Menu/menu1.png",
+        "Menu/menu2.png",
+        CC_CALLBACK_1(MenuScene::gamescene2, this));
+    startbutton2->setScale(1.1f);
+    startbutton2->setPosition(Vec2(700, 260));
+
+    auto exitlabel = Label::createWithTTF("Exit", "fonts/Marker Felt.ttf", 30);
+    auto exitbutton = MenuItemLabel::create(exitlabel, CC_CALLBACK_1(MenuScene::exit, this));
     exitbutton->setPosition(Vec2(950, 40));
     exitbutton->setColor(Color3B(75, 75, 75));
 
     auto menu = Menu::create(startbutton, NULL);
     menu->setPosition(Vec2::ZERO);
     menu->addChild(exitbutton);
-    this->addChild(menu, 1);
+    menu->addChild(startbutton2);
+        this->addChild(menu, 1);
 
     return true;
 }
@@ -53,12 +61,15 @@ bool MenuScene::init()
 
 void MenuScene::gamescene(Ref* pSender)
 {
-    Director::getInstance()->pushScene(GameScene::createScene());
+Director::getInstance()->replaceScene(GameScene::createScene());
 }
 
+void MenuScene::gamescene2(Ref* pSender)
+{
+    Director::getInstance()->replaceScene(GameScene2::createScene());
+}
 
 void MenuScene::exit(Ref* pSender)
 {
     Director::getInstance()->end();
 }
-
