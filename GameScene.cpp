@@ -173,7 +173,7 @@ void  GameScene::update(float updatetime)
 
 	 if (producetime >= 10.0) {
 		 producetime = 0;
-		 SUN* new_sun = new SUN(sunflower);
+		 SUN* new_sun = new SUN(sky);
 		 new_sun->sunsprite->setScale(0.2f);
 		 this->addChild(new_sun->sunsprite, 3);
 		 suns.push_back(new_sun);
@@ -187,13 +187,36 @@ void  GameScene::update(float updatetime)
 		 for (SUN* sun : suns) {
 			 total_collection += sun->collection;
 		 }	
+
 		 //total_collection = (suns.size()-1)*25;
+		 auto cover = Sprite::create("game/cover.png");
+		 
+		 cover->setPosition(Vec2(40,Y_MAX-75));
+		 this->addChild(cover, 4);
+		 if (sun_num != nullptr) {
+			 this->removeChild(sun_num);
+		 }
 		 sun_num = Label::createWithTTF(std::to_string(total_collection*25), "fonts/Marker Felt.ttf", 24);
 		 this->addChild(sun_num, 5);
 		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 		 sun_num->enableShadow();
 	 }
-	 
+	 else
+	 {
+		 total_collection = 0;
+		 for (SUN* sun : suns) {
+			 total_collection += sun->collection;
+		 }
+		 //total_collection = (suns.size()-1)*25;
+		 auto cover = Sprite::create("game/cover.png");
+
+		 cover->setPosition(Vec2(40, Y_MAX - 75));
+		 this->addChild(cover, 4);
+		 sun_num = Label::createWithTTF(std::to_string(total_collection * 25), "fonts/Marker Felt.ttf", 24);
+		 this->addChild(sun_num, 5);
+		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
+		 sun_num->enableShadow();
+	 }
 	 //向日葵生成，豌豆生成
 	 {
 		 for (auto it = plants.begin(); it != plants.end(); it++) {
@@ -224,6 +247,13 @@ void  GameScene::update(float updatetime)
 							 total_collection += sun->collection;
 						 }
 						 //total_collection = (suns.size()-1)*25;
+						 auto cover = Sprite::create("game/cover.png");
+						 cover->setScale(1.1f);
+						 cover->setPosition(Vec2(40, Y_MAX - 75));
+						 this->addChild(cover, 4);
+						 if (sun_num != nullptr) {
+							 this->removeChild(sun_num);
+						 }
 						 sun_num = Label::createWithTTF(std::to_string(total_collection * 25), "fonts/Marker Felt.ttf", 24);
 						 this->addChild(sun_num, 5);
 						 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
@@ -520,7 +550,8 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
-					{
+
+					/* {
 						SUN* new_sun = new SUN(sunflower);
 						new_sun->sunsprite->setScale(0.2f);
 						this->addChild(new_sun->sunsprite, 3);
@@ -534,13 +565,20 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 						for (SUN* sun : suns) {
 							total_collection += sun->collection;
 						}
-						//total_collection =( suns.size()-1) * 25;
+						//total_collection = total_collection/2;
+						auto cover = Sprite::create("game/cover.png");
+						cover->setScale(1.1f);
+						cover->setPosition(Vec2(40, Y_MAX - 75));
+						this->addChild(cover, 4);
+						if (sun_num != nullptr) {
+							this->removeChild(sun_num);
+						}
 						sun_num = Label::createWithTTF(std::to_string(total_collection*25), "fonts/Marker Felt.ttf", 24);
 						
 						this->addChild(sun_num, 5);
 						sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 						sun_num->enableShadow();
-					}
+					}*/
 				}
 				//this->addChild(tempplant->run_animation(plantpos));
 				break;

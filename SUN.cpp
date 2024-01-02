@@ -80,14 +80,15 @@ void SUN::onMouseDown(Event* event)
    // auto button = ui->getChildByTag(4);
     //获取鼠标事件触发的坐标->限定按钮范围
    if (e->getCursorX() >= sunsprite->getPositionX() - 100 && e->getCursorX() <= sunsprite->getPositionX() + 100
-        && e->getCursorY() >= sunsprite->getPositionY() - 60 && e->getCursorY() <= sunsprite->getPositionY() + 60)
+        && e->getCursorY() >= sunsprite->getPositionY() - 60 && e->getCursorY() <= sunsprite->getPositionY() + 60&& e->getCursorY()<450)
     /*if (e->getCursorX() >= 0 && e->getCursorX() <= X_MAX
         && e->getCursorY() >= 0 && e->getCursorY() <= Y_MAX)*/
     {
         move_2();
-        collection++;
+        collection=1;
         num_sun--;
     }
+   collection = std::min(1, collection);
 }
 
 void SUN::collectsun() {
