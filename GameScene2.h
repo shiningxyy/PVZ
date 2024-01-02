@@ -60,10 +60,14 @@ public:
     Vec2 plant_pos[5][9];
     void compete_plant_pos();//根据行和列计算Vec2
     bool compete_row_col(Vec2 vpos, int& row, int& col);//根据Vec2计算行和列
-    double producetime;
+    double producetime;//下落阳光计时器
+    double producetime2;//子弹计时器
+    double producetime3;//向日葵阳光计时器
+    double producetime4;//卡片冷却计时器
     SUN* sun;
     Label* sun_num;
     std::vector<SUN*> suns;
+    bool is_in_lawn(Vec2);
 };
 
 #endif // __GAMESCENE2_H__

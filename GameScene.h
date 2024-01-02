@@ -72,6 +72,7 @@ public:
     double producetime4;//¿¨Æ¬ÀäÈ´¼ÆÊ±Æ÷
     std::vector<SUN*> suns;
     Label* sun_num;
+    bool is_in_lawn(Vec2);
 };
 
 #endif // __GAMESCENE_H__

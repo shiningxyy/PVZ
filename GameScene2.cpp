@@ -1,6 +1,6 @@
 #include "GameScene2.h"
 
-int total_collection2 = 0;
+int total_collection2 = 50;
 Scene* GameScene2::createScene()
 {
 	return GameScene2::create();
@@ -22,7 +22,7 @@ bool GameScene2::init()
 	{
 		return false;
 	}
-
+	auto backgroundAudioID = AudioEngine::play2d("music/night.mp3", true);
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -132,7 +132,67 @@ void  GameScene2::update(float updatetime)
 		if (is_lose == 1)
 			Director::getInstance()->replaceScene(LoseScene::create());
 	}
+	{
+		for (auto it = plants.begin(); it != plants.end(); it++) {
+			if ((*it)->get_blood() <= 0) {
+				(*it)->get_sprite()->removeFromParent();
+				(*it)->removeFromParent();
+				it = plants.erase(it);
+				continue;
+			}
+			if ((*it)->get_type() == SUNFLOWER) {
+				this->producetime3 += updatetime;
+				if (this->producetime3 >= (*it)->rate_time) {
+					this->producetime3 = 0.0;
+					for (auto ppos = sunflowerpos.begin(); ppos != sunflowerpos.end(); ppos++)
+					{
+						SUN* new_sun = new SUN(sunflower);
+						new_sun->sunsprite->setScale(0.2f);
+						this->addChild(new_sun->sunsprite, 3);
+						suns.push_back(new_sun);
 
+						//new_sun->start_move();  // 生成阳光并下落
+						new_sun->jump(*ppos);//给坐标，直接有阳光
+						auto _mouseListener = EventListenerMouse::create();
+						_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
+						_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
+						total_collection2 = 0;
+						for (SUN* sun : suns) {
+							total_collection2 += sun->collection;
+						}
+						//total_collection = (suns.size()-1)*25;
+						auto cover = Sprite::create("game/cover.png");
+						cover->setScale(1.1f);
+						cover->setPosition(Vec2(40, Y_MAX - 75));
+						this->addChild(cover, 4);
+						if (sun_num != nullptr) {
+							this->removeChild(sun_num);
+						}
+						sun_num = Label::createWithTTF(std::to_string(total_collection2 * 25), "fonts/Marker Felt.ttf", 24);
+						this->addChild(sun_num, 5);
+						sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
+						sun_num->enableShadow();
+					}
+				}
+			}
+			else if ((*it)->get_type() == PEASHOOTER) {
+				this->producetime2 += updatetime;
+				if (this->producetime2 >= (*it)->rate_time)
+				{
+					this->producetime2 = 0;
+					for (auto ppos = peashooterpos.begin(); ppos != peashooterpos.end(); ppos++)
+					{
+						Bullet b;
+						b.sprite_init(Vec2((*ppos).x, (*ppos).y + 10));
+						this->addChild(b.bulletsprite, 66);
+						b.bullet_move();
+						b.bullet_explode();
+					}
+				}
+			}
+
+		}
+	}
 }
 
 void GameScene2::createplant() {
@@ -161,6 +221,7 @@ void GameScene2::createzombie()
 	int i = 10;
 	if (gametime == 10)
 	{
+		auto backgroundAudioID = AudioEngine::play2d("music/is_coming.mp3", false);
 		auto ZOMBIE11 = ZombieNormal::create();
 		ZOMBIE11->zombie->setPosition(Vec2(1200, 500));
 		ZOMBIE11->setrow(5);
@@ -341,6 +402,7 @@ void GameScene2::onTouchEnded(Touch* touch, Event* event)//触摸结束
 		Vec2 ppos = touch->getLocation();
 		mouse_s->setPosition(touch->getLocation());
 		compete_row_col(touch->getLocation(), row, col);
+		if (is_in_lawn(ppos))
 		{
 			Plant* tempplant = NULL;
 			switch (ptype) {
@@ -375,7 +437,8 @@ void GameScene2::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
-					{
+
+					/* {
 						SUN* new_sun = new SUN(sunflower);
 						new_sun->sunsprite->setScale(0.2f);
 						this->addChild(new_sun->sunsprite, 3);
@@ -385,17 +448,24 @@ void GameScene2::onTouchEnded(Touch* touch, Event* event)//触摸结束
 						auto _mouseListener = EventListenerMouse::create();
 						_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
 						_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-						total_collection2 = 0;
+						total_collection = 0;
 						for (SUN* sun : suns) {
-							total_collection2 += sun->collection;
+							total_collection += sun->collection;
 						}
-						//total_collection =( suns.size()-1) * 25;
-						sun_num = Label::createWithTTF(std::to_string(total_collection2 * 25), "fonts/Marker Felt.ttf", 24);
+						//total_collection = total_collection/2;
+						auto cover = Sprite::create("game/cover.png");
+						cover->setScale(1.1f);
+						cover->setPosition(Vec2(40, Y_MAX - 75));
+						this->addChild(cover, 4);
+						if (sun_num != nullptr) {
+							this->removeChild(sun_num);
+						}
+						sun_num = Label::createWithTTF(std::to_string(total_collection*25), "fonts/Marker Felt.ttf", 24);
 
 						this->addChild(sun_num, 5);
 						sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 						sun_num->enableShadow();
-					}
+					}*/
 				}
 				//this->addChild(tempplant->run_animation(plantpos));
 				break;
@@ -427,7 +497,7 @@ void GameScene2::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					mySprite->runAction(RepeatForever::create(animate));
 					{
 						Bullet b;
-						b.sprite_init(Vec2(ppos.x, ppos.y + 10));//(ppos.x, ppos.y + 10)
+						b.sprite_init(Vec2(ppos.x, ppos.y + 10));
 						this->addChild(b.bulletsprite, 66);
 						b.bullet_move();
 						//b.bullet_explode();
@@ -493,6 +563,22 @@ void GameScene2::onTouchEnded(Touch* touch, Event* event)//触摸结束
 				break;
 			}
 			plants.emplace_back(tempplant);
+		}
+		else {
+			switch (ptype) {
+			case SUNFLOWER:
+				cards[0]->cold = false;
+				break;
+			case PEASHOOTER:
+				cards[1]->cold = false;
+				break;
+			case WALLNUT:
+				cards[2]->cold = false;
+				break;
+			case CHERRYBOMB:
+				cards[3]->cold = false;
+				break;
+			}
 		}
 		ptype = NONE;
 	}
@@ -686,4 +772,10 @@ void GameScene2::plant(int row, int col, PlantType pt) {
 			plants.push_back(tempplant);
 		}
 	}
+}
+
+bool GameScene2::is_in_lawn(Vec2 pos) {
+	if (pos.x >= 250 && pos.x <= 980 && pos.y >= 65 && pos.y <= 520)
+		return true;
+	return false;
 }

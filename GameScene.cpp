@@ -156,7 +156,7 @@ void  GameScene::update(float updatetime)
 		 if (is_lose == 1) {
 			 
 			 AudioEngine::stopAll();
-			 auto backgroundAudioID = AudioEngine::play2d("music/lose.wav", false);
+			 auto backgroundAudioID = AudioEngine::play2d("music/lose.mp3", false);
 			 Director::getInstance()->replaceScene(LoseScene::create());
 		 }
 	 }
@@ -171,7 +171,7 @@ void  GameScene::update(float updatetime)
 		 }
 	 }
 
-	 if (producetime >= 10.0) {
+	 if (producetime >= 10.0) {//白天生成阳光
 		 producetime = 0;
 		 SUN* new_sun = new SUN(sky);
 		 new_sun->sunsprite->setScale(0.2f);
@@ -305,6 +305,7 @@ void GameScene::createzombie()
 	 int i = 10;
 	 if (gametime ==10)
 	 {
+		 auto backgroundAudioID = AudioEngine::play2d("music/is_coming.mp3", false);
 		 auto ZOMBIE11 = ZombieNormal::create();
 		 ZOMBIE11->zombie->setPosition(Vec2(1200, 500));
 		 ZOMBIE11->setrow(5);
@@ -321,7 +322,7 @@ void GameScene::createzombie()
 		 zombienumber.pushBack(ZOMBIE13);
 
 	 }
-	 else if (gametime == 100) {
+	 else if (gametime == 500) {
 		 auto ZOMBIE21 = ZombieNormal::create();
 		 ZOMBIE21->zombie->setPosition(Vec2(1500, 400));
 		 ZOMBIE21->setrow(4);
@@ -344,7 +345,7 @@ void GameScene::createzombie()
 		 ZOMBIE23->runaction();
 		 zombienumber.pushBack(ZOMBIE23);
 	 }
-	 else if (gametime == 200) {
+	 else if (gametime == 1000) {
 		 auto ZOMBIE31 = ZombieFlag::create();
 		 ZOMBIE31->zombie->setPosition(Vec2(1500, 300));
 		 ZOMBIE31->setrow(3);
@@ -516,6 +517,7 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 		Vec2 ppos = touch->getLocation();
 		mouse_s->setPosition(touch->getLocation());
 		compete_row_col(touch->getLocation(), row, col);
+		if(is_in_lawn(ppos))
 		{
 			Plant* tempplant = NULL;
 			switch (ptype) {
@@ -676,6 +678,22 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 				break;
 			}
 			plants.emplace_back(tempplant);
+		}
+		else {
+			switch (ptype) {
+			case SUNFLOWER:
+				cards[0]->cold = false;
+				break;
+			case PEASHOOTER:
+				cards[1]->cold = false;
+				break;
+			case WALLNUT:
+				cards[2]->cold = false;
+				break;
+			case CHERRYBOMB:
+				cards[3]->cold = false;
+				break;
+			}
 		}
 		ptype = NONE;
 	}
@@ -869,4 +887,10 @@ void GameScene::plant(int row, int col, PlantType pt) {
 			plants.push_back(tempplant);
 		}
 	}
+}
+
+bool GameScene::is_in_lawn(Vec2 pos) {
+	if (pos.x >= 250 && pos.x <= 980 && pos.y >= 65 && pos.y <= 520)
+		return true;
+	return false;
 }
