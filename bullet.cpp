@@ -21,6 +21,7 @@ bool Bullet::bullet_init() {
 
 
 void Bullet::bullet_explode() {
+    bulletsprite->stopAllActions();//Í£Ö¹¶¯×÷
     Animation* animation = Animation::create();
     animation->addSpriteFrameWithFile("pea.png");
     animation->addSpriteFrameWithFile("peaexplode.png");
