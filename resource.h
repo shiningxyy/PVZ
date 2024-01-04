@@ -22,46 +22,23 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ generated include file.
+// Used by game.RC
+//
 
-#include "cocos2d.h"
-#include "ZombieNormal.h"
-#include "StartScene.h"
-#include "GameScene.h"
+#define IDS_PROJNAME                100
+#define IDR_TESTJS    100
 
-/**
-@brief    The cocos2d Application.
+#define ID_FILE_NEW_WINDOW            32771
 
-Private inheritance here hides part of interface from Director.
-*/
-class  AppDelegate : private cocos2d::Application
-{
-public:
-    AppDelegate();
-    virtual ~AppDelegate();
-
-    virtual void initGLContextAttrs();
-
-    /**
-    @brief    Implement Director and Scene init code here.
-    @return true    Initialize success, app continue.
-    @return false   Initialize failed, app terminate.
-    */
-    virtual bool applicationDidFinishLaunching();
-
-    /**
-    @brief  Called when the application moves to the background
-    @param  the pointer of the application
-    */
-    virtual void applicationDidEnterBackground();
-
-    /**
-    @brief  Called when the application reenters the foreground
-    @param  the pointer of the application
-    */
-    virtual void applicationWillEnterForeground();
-};
-
-#endif // _APP_DELEGATE_H_
-
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NEXT_RESOURCE_VALUE    201
+#define _APS_NEXT_CONTROL_VALUE        1000
+#define _APS_NEXT_SYMED_VALUE        101
+#define _APS_NEXT_COMMAND_VALUE        32775
+#endif
+#endif

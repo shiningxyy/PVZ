@@ -1,6 +1,7 @@
 #include "GameScene.h"
-
+int cost = 0;
 int total_collection = 50;
+
 Scene* GameScene::createScene()
 {
     return GameScene::create();
@@ -14,71 +15,47 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
+
 bool GameScene::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if (!Scene::init())
-    {
-        return false;
-    }
+	//////////////////////////////
+	// 1. super init first
+	if (!Scene::init())
+	{
+		return false;
+	}
 	// set the background music and continuously play it.
 	auto backgroundAudioID = AudioEngine::play2d("music/bg_daytime.mp3", true);
 
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    auto gamebackground = Sprite::create("game/Background_0.jpg");
-    gamebackground->setScale(1.0f); 
-    gamebackground->setPosition(Vec2(gamebackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
-    this->addChild(gamebackground, -1);
-   /* gamebackground->setPosition(Vec2(visibleSize.width - gamebackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
-    this->addChild(gamebackground, -1);
-    gamebackground->runAction(MoveTo::create(1.0f, Vec2(gamebackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y)));
-    */
+	auto gamebackground = Sprite::create("game/Background_0.jpg");
+	gamebackground->setScale(1.0f);
+	/*gamebackground->setPosition(Vec2(gamebackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
+	this->addChild(gamebackground, -1);*/
+	gamebackground->setPosition(Vec2(visibleSize.width - gamebackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
+	this->addChild(gamebackground, -1);
+	gamebackground->runAction(MoveTo::create(1.0f, Vec2(gamebackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y)));
 
-    /*auto PanelBackground = Sprite::create("game/PanelBackground.png");
-    PanelBackground->setScale(1.0f);
-    PanelBackground->setPosition(Vec2(PanelBackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
-    DelayTime::create(1.0f);
-    this->addChild(PanelBackground, 0);
-    */
-    auto toolbar = Sprite::create("game/toolbarWithoutShovel.png");
-    toolbar->setScale(0.9f);
-    toolbar->setPosition(Vec2(toolbar->getContentSize().width*0.9f / 2, visibleSize.height -toolbar->getContentSize().height * 0.9f / 2));
-    this->addChild(toolbar, 1);
 
-    createcar();
+	/*auto PanelBackground = Sprite::create("game/PanelBackground.png");
+	PanelBackground->setScale(1.0f);
+	PanelBackground->setPosition(Vec2(PanelBackground->getContentSize().width / 2, visibleSize.height / 2 + origin.y));
+	DelayTime::create(1.0f);
+	this->addChild(PanelBackground, 0);
+	*/
+
+
+
 	auto listener = EventListenerTouchOneByOne::create();//创建鼠标监听
 	listener->onTouchBegan = CC_CALLBACK_2(GameScene::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(GameScene::onTouchMoved, this);
 	listener->onTouchEnded = CC_CALLBACK_2(GameScene::onTouchEnded, this);
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-	createplant();
-
-	/*
-	{//生成初始阳光
-		SUN* new_sun = new SUN(sunflower);
-		new_sun->sunsprite->setScale(0.2f);
-		this->addChild(new_sun->sunsprite, 3);
-		suns.push_back(new_sun);
-		new_sun->start_move();  // 生成阳光并下落
-		//sun->jump(Vec2(400, 90));//给坐标，直接有阳光
-		auto _mouseListener = EventListenerMouse::create();
-		_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
-		_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-		//total_collection = suns.size() * 25;
-		sun_num = Label::createWithTTF(std::to_string(0), "fonts/Marker Felt.ttf", 24);
-		this->addChild(sun_num, 5);
-		sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
-		sun_num->enableShadow();
-	}
-	*/
-
-
-    this->scheduleUpdate();
-    return true;
+	this->scheduleUpdate();
+	return true;
 }
 
 void GameScene::createcar() {
@@ -115,32 +92,125 @@ void GameScene::createcar() {
 
 void  GameScene::update(float updatetime)
 {
-	 this->producetime += updatetime;
-	 gametime++;
-	 createzombie();
-	 for (auto& it : zombienumber)
-	 {
-		 if (it->state == 3)
-			 continue;
-		 else {
-			 for (auto& it2 : carnumber) {
-				 if (it->row == it2->row) {
-					 log("%f", it2->getx());
+	this->producetime += updatetime;
+	gametime++;
+	createzombie();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-					 if (fabs(it->getx() - it2->getx()) <= 5) {
-						 if (it2->state != 1) {
-							 it2->setstate(1);
-							 it2->runaction();
-							 if (it->state != 3) {
-								 it->setstate(3);
-								 it->runaction();
-							 }
-						 }
-					 }
-				 }
-			 }
-		 }
-	 }
+	if (gametime == 61) {
+		auto toolbar = Sprite::create("game/toolbarWithoutShovel.png");
+		toolbar->setScale(0.9f);
+		toolbar->setPosition(Vec2(toolbar->getContentSize().width * 0.9f / 2, visibleSize.height - toolbar->getContentSize().height * 0.9f / 2));
+		this->addChild(toolbar, 1);
+
+		createcar();
+		
+		createplant();
+
+	}
+	if (gametime == 100) {
+		auto ready1 = Sprite::create("readySetPlant1.png");
+		ready1->setPosition(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
+		ready1->setScale(1.1f);
+		this->addChild(ready1, 100);
+		auto seq1 = Sequence::create(ScaleTo::create(1.0f, 1.0f), FadeOut::create(0.2f), RemoveSelf::create(), nullptr);
+		ready1->runAction(seq1);
+	}
+	if (gametime == 180) {
+		auto ready2 = Sprite::create("readySetPlant2.png");
+		ready2->setPosition(visibleSize.width / 2 + origin.x - 20, visibleSize.height / 2 + origin.y);
+		ready2->setScale(1.1f);
+		this->addChild(ready2, 100);
+		auto seq2 = Sequence::create(ScaleTo::create(1.0f, 1.0f), FadeOut::create(0.2f), RemoveSelf::create(), nullptr);
+		ready2->runAction(seq2);
+	}
+	if (gametime == 260) {
+		auto ready3 = Sprite::create("readySetPlant3.png");
+		ready3->setPosition(visibleSize.width / 2 + origin.x - 10, visibleSize.height / 2 + origin.y);
+		ready3->setScale(1.1f);
+		this->addChild(ready3, 100);
+		auto seq3 = Sequence::create(ScaleTo::create(1.0f, 1.0f), FadeOut::create(0.2f), RemoveSelf::create(), nullptr);
+		ready3->runAction(seq3);
+	}
+	for (auto& it : zombienumber)
+	{
+		if (it->state == 3)
+			continue;
+		else {
+			if (it->hp <= 0) {
+				it->setstate(3);
+				it->runaction();
+				continue;
+			}
+
+			for (auto& it2 : carnumber) {
+				if (it->row == it2->row) {
+					if (it->getx() <= 1024) {
+						if (fabs(it->getx() - it2->getx()) <= 10) {
+							if (it2->state != 1) {
+								it2->setstate(1);
+								it2->runaction();
+							}
+							if (it->state != 3) {
+								it->hp = 0;
+							}
+
+						}
+					}
+				}
+			}
+			int len = plants.size();
+			for (int i = 0; i < len; i++) {
+				if (it->gety() - plantpos[i].y <= 30 && it->gety() - plantpos[i].y > 0) {
+					if (fabs(it->getx() - plantpos[i].x) <= 15) {
+						if (plants[i]->get_blood() > 0) {
+							if (it->state != 2) {
+								it->setstate(2);
+								it->runaction();
+								auto backgroundAudioID = AudioEngine::play2d("music/eatPlants.mp3", false);
+							}
+							else {
+								plants[i]->attacked(1.5);
+							}
+						}
+
+					}
+
+				}
+
+			}
+			int count = 0;
+			for (int i = 0; i < len; i++) {
+				if (it->gety() - plantpos[i].y <= 30 && it->gety() - plantpos[i].y > 0) {
+					if (fabs(it->getx() - plantpos[i].x) <= 15 && plants[i]->get_blood() > 0) {
+						count++;
+					}
+				}
+
+			}
+			if (count == 0)
+			{
+				if (it->state == 2) {
+					it->setstate(1);
+					it->runaction();
+				}
+			}
+			for (auto& it3 : bullets) {
+				if (it3->judge_crash() == 0) {
+					if ( fabs(it3->gety() - it->gety())<20) {
+						if (it->getx() <= 1024) {
+							if (fabs(it->getx() - it3->getx()) <= 10) {
+								it3->set_crash();
+								it3->bullet_explode();
+								it->takedamagefromplant(10);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	 if (gametime > 11) {
 		 int is_win = 1, is_lose = 0;
 		 for (auto& it : zombienumber)
@@ -152,11 +222,14 @@ void  GameScene::update(float updatetime)
 			 }
 		 }
 		 if (is_win == 1)
+		 {
+			 AudioEngine::stopAll();
 			 Director::getInstance()->replaceScene(WinScene::create());
+		 }
 		 if (is_lose == 1) {
 			 
 			 AudioEngine::stopAll();
-			 auto backgroundAudioID = AudioEngine::play2d("music/lose.wav", false);
+			 auto backgroundAudioID = AudioEngine::play2d("music/lose.mp3", false);
 			 Director::getInstance()->replaceScene(LoseScene::create());
 		 }
 	 }
@@ -171,7 +244,7 @@ void  GameScene::update(float updatetime)
 		 }
 	 }
 
-	 if (producetime >= 10.0) {
+	 if (producetime >= 10.0) {//白天生成阳光
 		 producetime = 0;
 		 SUN* new_sun = new SUN(sky);
 		 new_sun->sunsprite->setScale(0.2f);
@@ -185,17 +258,12 @@ void  GameScene::update(float updatetime)
 		 _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 		 total_collection = 50;
 		 for (SUN* sun : suns) {
-			 total_collection += (sun->collection*25);
-		 }	
-
-		 //total_collection = (suns.size()-1)*25;
-		 auto cover = Sprite::create("game/cover.png");
-		 
-		 cover->setPosition(Vec2(40,Y_MAX-75));
-		 this->addChild(cover, 4);
-		 if (sun_num != nullptr) {
-			 this->removeChild(sun_num);
+			 total_collection += (sun->collection * 25);
 		 }
+		 total_collection -= cost;
+		 auto cover = Sprite::create("game/cover.png");
+		 cover->setPosition(Vec2(40, Y_MAX - 75));
+		 this->addChild(cover, 4);
 		 sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
 		 this->addChild(sun_num, 5);
 		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
@@ -207,25 +275,43 @@ void  GameScene::update(float updatetime)
 		 for (SUN* sun : suns) {
 			 total_collection += (sun->collection * 25);
 		 }
-		 //total_collection = (suns.size()-1)*25;
+		 total_collection -= cost;
 		 auto cover = Sprite::create("game/cover.png");
-
 		 cover->setPosition(Vec2(40, Y_MAX - 75));
 		 this->addChild(cover, 4);
-		 sun_num = Label::createWithTTF(std::to_string(total_collection ), "fonts/Marker Felt.ttf", 24);
+		 sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
 		 this->addChild(sun_num, 5);
 		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 		 sun_num->enableShadow();
 	 }
 	 //向日葵生成，豌豆生成
 	 {
-		 for (auto it = plants.begin(); it != plants.end(); it++) {
+		
+		 /*
+		  for (auto it = plants.begin(); it != plants.end(); it++,i++) {
 			 if ((*it)->get_blood() <= 0) {
-				 (*it)->get_sprite()->removeFromParent();
+				// plantsprite[i]->removeFromParent();
+				// for (int j = i; j < len1-1; j++)
+				//	 plantsprite[j] = plantsprite[j + 1];
 				 (*it)->removeFromParent();
 				 it = plants.erase(it);
 				 continue;
 			 }
+		 */ int i = 0;
+		 auto is = plantsprite.begin();
+			 for (auto it = plants.begin(); it != plants.end()&&is!=plantsprite.end();) {	
+				 if ((*it)->get_blood() <= 0) {
+					// int len1 = plants.size();
+					// plantsprite[i]->removeFromParent();
+					 // for (int j = i; j < len1-1; j++)
+					 // plantsprite[j] = plantsprite[j + 1];
+					 // plantsprite[len1 - 1] = NULL;
+					// (*is)->removeFromParent();
+					// is = plantsprite.erase(is);
+					// (*it)->removeFromParent();
+					// it = plants.erase(it);
+					 continue;
+				 }
 			 if ((*it)->get_type() == SUNFLOWER) {
 				 this->producetime3 += updatetime;
 				 if (this->producetime3 >= (*it)->rate_time) {
@@ -246,14 +332,10 @@ void  GameScene::update(float updatetime)
 						 for (SUN* sun : suns) {
 							 total_collection += (sun->collection * 25);
 						 }
-						 //total_collection = (suns.size()-1)*25;
+						 total_collection -= cost;
 						 auto cover = Sprite::create("game/cover.png");
-						 cover->setScale(1.1f);
 						 cover->setPosition(Vec2(40, Y_MAX - 75));
 						 this->addChild(cover, 4);
-						 if (sun_num != nullptr) {
-							 this->removeChild(sun_num);
-						 }
 						 sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
 						 this->addChild(sun_num, 5);
 						 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
@@ -268,35 +350,35 @@ void  GameScene::update(float updatetime)
 					 this->producetime2 = 0;			
 					 for(auto ppos=peashooterpos.begin(); ppos != peashooterpos.end();ppos++)
 					 {
-						 Bullet b;
-						 b.sprite_init(Vec2((*ppos).x, (*ppos).y + 10));
-						 this->addChild(b.bulletsprite, 66);
-						 b.bullet_move();
-						 b.bullet_explode();
+						 
+						 Bullet* b = new Bullet;
+						 b->sprite_init(Vec2((*ppos).x, (*ppos).y + 10));
+						 this->addChild(b->bulletsprite, 66);
+						 b->bullet_move(); //移动到最右边
+						 bullets.push_back(b);
+						 auto hit = AudioEngine::play2d("music/hit.mp3", false);
+						// b.bullet_explode();
+						 
+
+						/*
+						 Bullet* b = new Bullet;
+						 b->sprite_init(Vec2((*ppos).x, (*ppos).y + 10));
+						 this->addChild(b->bulletsprite, 66);
+						 b->bullet_move(); //移动到最右边
+						 bullets.push_back(b);
+						 b->bullet_explode();//爆炸动画
+						 //b->delete_sprite();//删除精灵，不知道有什么用，先放着
+						 bullets.pop_back();//数组弹出子弹元素
+						*/
 					 }
 				 }
 			 }
-			 
+			 it++;
+			 is++;
+			 i++;
 		 }
-		/*
-		 for (auto it = plants.begin(); it != plants.end(); it++) {		 
-			 if ((*it)->get_type() == PEASHOOTER) {
-				 this->producetime2 += updatetime;
-				 if (this->producetime2 >= 1.5)
-				 {
-					 this->producetime2 = 0;
-					 Bullet b;
-					 for(auto ppos=peashooterpos.begin(); ppos != peashooterpos.end();ppos++)
-					 {
-						 b.sprite_init(Vec2((*ppos).x, (*ppos).y + 10));
-						 this->addChild(b.bulletsprite, 66);
-						 b.bullet_move();
-						 b.bullet_explode();
-					 }
-				 }
-			 }
-		 }
-		*/
+		
+		 
 	 }
 }
 
@@ -305,6 +387,7 @@ void GameScene::createzombie()
 	 int i = 10;
 	 if (gametime ==10)
 	 {
+		 auto backgroundAudioID = AudioEngine::play2d("music/is_coming.mp3", false);
 		 auto ZOMBIE11 = ZombieNormal::create();
 		 ZOMBIE11->zombie->setPosition(Vec2(1200, 500));
 		 ZOMBIE11->setrow(5);
@@ -321,7 +404,7 @@ void GameScene::createzombie()
 		 zombienumber.pushBack(ZOMBIE13);
 
 	 }
-	 else if (gametime == 100) {
+	 else if (gametime == 500) {
 		 auto ZOMBIE21 = ZombieNormal::create();
 		 ZOMBIE21->zombie->setPosition(Vec2(1500, 400));
 		 ZOMBIE21->setrow(4);
@@ -344,7 +427,7 @@ void GameScene::createzombie()
 		 ZOMBIE23->runaction();
 		 zombienumber.pushBack(ZOMBIE23);
 	 }
-	 else if (gametime == 200) {
+	 else if (gametime == 1000) {
 		 auto ZOMBIE31 = ZombieFlag::create();
 		 ZOMBIE31->zombie->setPosition(Vec2(1500, 300));
 		 ZOMBIE31->setrow(3);
@@ -425,7 +508,7 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 
 	for (int i = 0; i < 4; i++) {
 		auto t = cards[i];
-		if (t->cold == true || mouse_s != nullptr )//还在冷却，该卡不可选
+		if (t->cold == true || mouse_s != nullptr || t->cost > total_collection)//还在冷却，该卡不可选   
 			continue;
 		double w = t->sprite->getContentSize().width / 2;
 		double h = t->sprite->getContentSize().height / 2;
@@ -439,6 +522,7 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 
 			case SUNFLOWER_CARD:
 			{
+				cost+= t->cost;
 				t->cold = true;
 				Sunflower* sunf = new Sunflower;
 				mouse_s = Sprite::create("SunFlower/SunFlower_0.png");
@@ -451,6 +535,7 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 			}
 			case PEASHOOTER_CARD:
 			{
+				cost += t->cost;
 				t->cold = true;
 				Peashooter* pea = new Peashooter;
 				mouse_s = Sprite::create("Peashooter/Peashooter_0.png");
@@ -463,6 +548,7 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 			}
 			case WALLNUT_CARD:
 			{
+				cost += t->cost;
 				t->cold = true;
 				Wallnut* wal = new Wallnut;
 				mouse_s = Sprite::create("WallNut/WallNut_0.png");
@@ -475,6 +561,7 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 			}
 			case CHERRYBOMB_CARD:
 			{
+				cost += t->cost;
 				t->cold = true;
 				Cherrybomb* che = new Cherrybomb;
 				mouse_s = Sprite::create("CherryBomb/CherryBomb_0.png");
@@ -512,14 +599,28 @@ void GameScene::onTouchMoved(Touch* touch, Event* event) {
 void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 {
 	if (mouse_s != nullptr && ptype != NONE) {
-		int row, col;
 		Vec2 ppos = touch->getLocation();
 		mouse_s->setPosition(touch->getLocation());
-		compete_row_col(touch->getLocation(), row, col);
+		if(is_in_lawn(ppos))
 		{
+	
+			
+			int y = ppos.y;
+			if (y >= 65 && y < 155)
+				ppos.y = 75;
+			else if (y >= 155 && y < 245)
+				ppos.y = 190;
+			else if (y >= 245 && y < 345)
+				ppos.y = 285;
+			else if (y >= 345 && y < 440)
+				ppos.y = 385;
+			else if (y >= 440 && y < 520)
+				ppos.y = 490;
+	
+			
 			Plant* tempplant = NULL;
 			switch (ptype) {
-			case SUNFLOWER:
+			case SUNFLOWER:	
 				tempplant = new Sunflower;
 				tempplant->set_type(SUNFLOWER);
 				{
@@ -550,37 +651,10 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
-
-					/* {
-						SUN* new_sun = new SUN(sunflower);
-						new_sun->sunsprite->setScale(0.2f);
-						this->addChild(new_sun->sunsprite, 3);
-						suns.push_back(new_sun);
-						//sun->start_move();  // 生成阳光并下落
-						new_sun->jump(ppos);//给坐标，直接有阳光
-						auto _mouseListener = EventListenerMouse::create();
-						_mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
-						_eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-						total_collection = 0;
-						for (SUN* sun : suns) {
-							total_collection += sun->collection;
-						}
-						//total_collection = total_collection/2;
-						auto cover = Sprite::create("game/cover.png");
-						cover->setScale(1.1f);
-						cover->setPosition(Vec2(40, Y_MAX - 75));
-						this->addChild(cover, 4);
-						if (sun_num != nullptr) {
-							this->removeChild(sun_num);
-						}
-						sun_num = Label::createWithTTF(std::to_string(total_collection*25), "fonts/Marker Felt.ttf", 24);
-						
-						this->addChild(sun_num, 5);
-						sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
-						sun_num->enableShadow();
-					}*/
+					plantsprite.emplace_back(mySprite);
+					
 				}
-				//this->addChild(tempplant->run_animation(plantpos));
+				
 				break;
 			case PEASHOOTER:
 				tempplant = new Peashooter;
@@ -608,15 +682,10 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
-					{
-						Bullet b;
-						b.sprite_init(Vec2(ppos.x, ppos.y + 10));
-						this->addChild(b.bulletsprite, 66);
-						b.bullet_move();
-
-					}
+					plantsprite.emplace_back(mySprite);
+									
 				}
-				//this->addChild(tempplant->run_animation(plantpos));
+			
 				break;
 			case WALLNUT:
 				tempplant = new Wallnut;
@@ -646,8 +715,9 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
+					plantsprite.emplace_back(mySprite);
 				}
-				//this->addChild(tempplant->run_animation(plantpos));
+				
 				break;
 			case CHERRYBOMB:
 				tempplant = new Cherrybomb;
@@ -669,13 +739,31 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
+					plantsprite.emplace_back(mySprite);
 				}
-				//this->addChild(tempplant->run_animation(plantpos));
+				
 				break;
 			default:
 				break;
 			}
 			plants.emplace_back(tempplant);
+			plantpos.push_back(ppos);
+		}
+		else {
+			switch (ptype) {
+			case SUNFLOWER:
+				cards[0]->cold = false;
+				break;
+			case PEASHOOTER:
+				cards[1]->cold = false;
+				break;
+			case WALLNUT:
+				cards[2]->cold = false;
+				break;
+			case CHERRYBOMB:
+				cards[3]->cold = false;
+				break;
+			}
 		}
 		ptype = NONE;
 	}
@@ -702,171 +790,8 @@ bool GameScene::compete_row_col(Vec2 vpos, int& row, int& col) {
 	return false;
 }
 
-void GameScene::compete_plant_pos() {
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	for (int i = 0; i < 5; i++)
-		for (int j = 0; j < 9; j++)
-		{
-			//float x = 0.15f * i + 0.15f, y = 0.09f * j + 0.21f;
-
-			//plant_pos[i][j] = Vec2(visibleSize.width * y, visibleSize.height * x);
-			plant_pos[i][j] = Vec2(10 * i, 10 * j);
-		}
-}
-
-void GameScene::plant(int row, int col, PlantType pt) {
-
-	compete_plant_pos();
-	Vec2 plantpos = plant_pos[row][col];
-	Card* tempcard;
-	int index = -1;
-	switch (pt) {
-	case SUNFLOWER:
-		tempcard = cards[0];
-		index = 0;
-		break;
-	case PEASHOOTER:
-		tempcard = cards[1];
-		index = 1;
-		break;
-	case WALLNUT:
-		tempcard = cards[2];
-		index = 2;
-		break;
-	case CHERRYBOMB:
-		tempcard = cards[3];
-		index = 3;
-		break;
-	default:
-		break;
-	}
-	if (tempcard->cold == 0) {//不在冷却时间
-		//if 阳光总量>=temp->cost
-		{
-			//阳光总量-=tempcard->cost;
-			cards[index]->set_cold(true);
-			cards[index]->cold_animation();
-			Plant* tempplant = NULL;
-			switch (pt) {
-			case SUNFLOWER:
-				tempplant = new Sunflower;
-				tempplant->set_type(SUNFLOWER);
-				{
-					auto mySprite = Sprite::create("SunFlower/SunFlower_0.png");
-					mySprite->setPosition(plantpos);
-					this->addChild(mySprite, 0);
-					Vector<SpriteFrame*> animFrames;
-					animFrames.reserve(18);
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_0.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_1.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_2.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_3.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_4.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_5.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_6.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_7.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_8.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_9.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_10.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_11.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_12.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_13.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_14.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_15.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_16.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_17.png", Rect(0, 0, 64, 90)));
-					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-					Animate* animate = Animate::create(animation);
-					mySprite->runAction(RepeatForever::create(animate));
-				}
-				//this->addChild(tempplant->run_animation(plantpos));
-				break;
-			case PEASHOOTER:
-				tempplant = new Peashooter;
-				tempplant->set_type(PEASHOOTER);
-				{
-					Vector<SpriteFrame*> animFrames;
-					auto mySprite = Sprite::create("Peashooter/Peashooter_0.png");
-					mySprite->setPosition(plantpos);
-					this->addChild(mySprite, 0);
-					animFrames.reserve(13);
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_0.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_1.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_2.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_3.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_4.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_5.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_6.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_7.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_8.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_9.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_10.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_11.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_12.png", Rect(0, 0, 80, 90)));
-					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-					Animate* animate = Animate::create(animation);
-					mySprite->runAction(RepeatForever::create(animate));
-				}
-				//this->addChild(tempplant->run_animation(plantpos));
-				break;
-			case WALLNUT:
-				tempplant = new Wallnut;
-				tempplant->set_type(WALLNUT);
-				{
-					Vector<SpriteFrame*> animFrames;
-					auto mySprite = Sprite::create("WallNut/WallNut_0.png");
-					mySprite->setPosition(plantpos);
-					this->addChild(mySprite, 0);
-					animFrames.reserve(16);
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_0.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_1.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_2.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_3.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_4.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_5.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_6.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_7.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_8.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_9.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_10.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_11.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_12.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_13.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_14.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_15.png", Rect(0, 0, 80, 90)));
-					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-					Animate* animate = Animate::create(animation);
-					mySprite->runAction(RepeatForever::create(animate));
-				}
-				//this->addChild(tempplant->run_animation(plantpos));
-				break;
-			case CHERRYBOMB:
-				tempplant = new Cherrybomb;
-				tempplant->set_type(CHERRYBOMB);
-				{
-					Vector<SpriteFrame*> animFrames;
-					auto mySprite = Sprite::create("CherryBomb/CherryBomb_0.png");
-					mySprite->setPosition(plantpos);
-					mySprite->setScale(0.9f);
-					this->addChild(mySprite, 0);
-					animFrames.reserve(7);
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_0.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_1.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_2.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_3.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_4.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_5.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_6.png", Rect(0, 0, 110, 90)));
-					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-					Animate* animate = Animate::create(animation);
-					mySprite->runAction(RepeatForever::create(animate));
-				}
-				//this->addChild(tempplant->run_animation(plantpos));
-				break;
-			default:
-				break;
-			}
-			plants.push_back(tempplant);
-		}
-	}
+bool GameScene::is_in_lawn(Vec2 pos) {
+	if (pos.x >= 250 && pos.x <= 980 && pos.y >= 65 && pos.y < 520)
+		return true;
+	return false;
 }

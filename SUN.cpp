@@ -58,7 +58,7 @@ void SUN::move_1() {
 } //µôÂä+Ðý×ª£¨animate£©+Í£Ö¹
 
 void SUN::move_2() {
-  
+    sunsprite->stopAllActions();//Í£Ö¹¶¯×÷
     sunsprite->setScale(0.2f);
     auto moveToup = MoveTo::create(1.5f, Vec2(40, Y_MAX-35));
     auto scaleTo = ScaleTo::create(1.0f, 0.1f);
@@ -84,11 +84,11 @@ void SUN::onMouseDown(Event* event)
     /*if (e->getCursorX() >= 0 && e->getCursorX() <= X_MAX
         && e->getCursorY() >= 0 && e->getCursorY() <= Y_MAX)*/
     {
-       stopAllActions();
         move_2();
-        collection++;
+        collection=1;
         num_sun--;
     }
+   collection = std::min(1, collection);
 }
 
 void SUN::collectsun() {

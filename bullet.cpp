@@ -27,11 +27,11 @@ void Bullet::bullet_explode() {
     animation->addSpriteFrameWithFile("peaexplode.png");
     animation->setDelayPerUnit(0.1f);
     bullet_explode_animate = Animate::create(animation);
-    bulletsprite->runAction(Repeat::create(bullet_explode_animate,1));
+    bulletsprite->runAction(Sequence::create(bullet_explode_animate, RemoveSelf::create(), nullptr));
 }//如果撞到，爆炸动画
 
 void Bullet::bullet_move() {
-    bulletsprite->runAction(MoveTo::create(3.0f, Vec2(1000, position.y)));//一直移动
+    bulletsprite->runAction(MoveTo::create(3.0f, Vec2(1024, position.y)));//一直移动
 }
 
 void Bullet::sprite_init(const Vec2& pos) {
@@ -39,7 +39,7 @@ void Bullet::sprite_init(const Vec2& pos) {
     bulletsprite = Sprite::create("pea.png");
     position = pos;
     bulletsprite->setPosition(position);
-  
+
 }
 
 Vec2 Bullet::getposition() const {
@@ -49,12 +49,12 @@ Vec2 Bullet::getposition() const {
 
 double Bullet::getx() const {
     // 获取子弹的x坐标
-    return this->getPositionX();
+    return bulletsprite->getPositionX();
 }
 
 double Bullet::gety() const {
     // 获取子弹的y坐标
-    return this->getPositionY();
+    return bulletsprite->getPositionY();
 }
 
 void Bullet::set_crash() {
@@ -71,11 +71,3 @@ void Bullet::set_attack_num(double damage) {
     // 设置子弹的伤害值
     attack_num = damage;
 }
-
-void Bullet::delete_sprite() {
-    // 删除精灵
-    bulletsprite->runAction( RemoveSelf::create());
-    
-}
-
-

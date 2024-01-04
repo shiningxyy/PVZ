@@ -20,7 +20,6 @@ public:
 	virtual void set_crash(); // 设置为判断
 	virtual bool judge_crash(); // crash judgement, if ture, delete the bullet
 	virtual void set_attack_num(double damage);// 设置子弹伤害
-	virtual void delete_sprite(); // 删除精灵 
 	int row;
 	//变量
 	Vec2 position; // 二维坐标

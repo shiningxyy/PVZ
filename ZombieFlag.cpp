@@ -11,7 +11,7 @@ bool ZombieFlag::init()
 	type = zombienormal;
 	hp = 100;
 	attack = 10;
-	moverate = 24;
+	moverate = 12;
 	zombie = Sprite::create("FlagZombie/Move/Zombie_0.png");
 	this->addChild(zombie);
 	initmove();

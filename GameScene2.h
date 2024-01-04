@@ -28,6 +28,7 @@
 #include<vector>
 #include"SUN.h"
 #include"bullet.h"
+#include"WinScene2.h"
 USING_NS_CC;
 
 class GameScene2 : public cocos2d::Scene
@@ -49,7 +50,7 @@ public:
     bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
     void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
     void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
-    void plant(int row, int col, PlantType t);
+    
     Sprite* mouse_s;
     PlantType ptype;
     std::vector<Card*>cards;
@@ -58,11 +59,19 @@ public:
     std::vector<Vec2>sunflowerpos;//向日葵坐标
     std::vector<Vec2>peashooterpos;
     Vec2 plant_pos[5][9];
-    void compete_plant_pos();//根据行和列计算Vec2
+ 
     bool compete_row_col(Vec2 vpos, int& row, int& col);//根据Vec2计算行和列
-    double producetime;
+    double producetime;//下落阳光计时器
+    double producetime2;//子弹计时器
+    double producetime3;//向日葵阳光计时器
+    double producetime4;//卡片冷却计时器
     SUN* sun;
     Label* sun_num;
+    std::vector<SUN*> suns;
+    bool is_in_lawn(Vec2);
+    std::vector<Vec2>plantpos;//植物坐标
+    std::vector<Sprite*>plantsprite;
+    std::vector<Bullet*> bullets;//存子弹
 };
 
 #endif // __GAMESCENE2_H__

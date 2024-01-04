@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\PVZ1\pvz1\Classes\AppDelegate.cpp">
+      <Filter>Source Files\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\PVZ1\pvz1\proj.win32\main.cpp">
+      <Filter>Source Files\proj.win32</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\PVZ1\pvz1\cocos2d\cocos\precheader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="card.cpp">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="sunflowercard.cpp">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="peashootercard.cpp">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="wallnutcard.cpp">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="cherrybombcard.cpp">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="plant.cpp">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClCompile>
+    <ClCompile Include="sunflower.cpp">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClCompile>
+    <ClCompile Include="wallnut.cpp">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClCompile>
+    <ClCompile Include="peashooter.cpp">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClCompile>
+    <ClCompile Include="cherrybomb.cpp">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClCompile>
+    <ClCompile Include="ZombieBase.cpp">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="ZombieBucket.cpp">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="ZombieFlag.cpp">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="ZombieNormal.cpp">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClCompile>
+    <ClCompile Include="Car.cpp">
+      <Filter>Source Files\Classes\Car</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicScene.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="SUN.cpp">
+      <Filter>Source Files\Classes\Sun</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>Source Files\Classes\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="LoseScene.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScene.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene2.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="startscene.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+    <ClCompile Include="WinScene2.cpp">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\PVZ1\pvz1\Classes\AppDelegate.h">
+      <Filter>Source Files\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\proj.win32\main.h">
+      <Filter>Source Files\proj.win32</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\proj.win32\resource.h">
+      <Filter>Source Files\proj.win32</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\Resources\CloseNormal.png">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\Resources\CloseSelected.png">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\Resources\HelloWorld.png">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\Resources\fonts\Marker Felt.ttf">
+      <Filter>Resources\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\Resources\fonts\arial.ttf">
+      <Filter>Resources\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\PVZ1\pvz1\Resources\res\.gitkeep">
+      <Filter>Resources\res</Filter>
+    </ClInclude>
+    <ClInclude Include="card.h">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="sunflowercard.h">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="wallnutcard.h">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="cherrybombcard.h">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="peashootercard.h">
+      <Filter>Source Files\Classes\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="plant.h">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClInclude>
+    <ClInclude Include="sunflower.h">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClInclude>
+    <ClInclude Include="peashooter.h">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClInclude>
+    <ClInclude Include="cherrybomb.h">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClInclude>
+    <ClInclude Include="ZombieBase.h">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="ZombieBucket.h">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="ZombieFlag.h">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="ZombieNormal.h">
+      <Filter>Source Files\Classes\Zombie</Filter>
+    </ClInclude>
+    <ClInclude Include="Car.h">
+      <Filter>Source Files\Classes\Car</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="MusicScene.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="SUN.h">
+      <Filter>Source Files\Classes\Sun</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>Source Files\Classes\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="LoseScene.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="WinScene.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene2.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="wallnut.h">
+      <Filter>Source Files\Classes\Plant</Filter>
+    </ClInclude>
+    <ClInclude Include="startscene.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+    <ClInclude Include="WinScene2.h">
+      <Filter>Source Files\Classes\Sence</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\PVZ1\pvz1\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D:\PVZ1\pvz1\proj.win32\game.rc">
+      <Filter>Source Files\proj.win32</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{FE8CE447-20A8-3205-B16D-FCB90D5A8F94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\fonts">
+      <UniqueIdentifier>{37852321-3E3D-3D11-B3CE-201812D6CAD8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\res">
+      <UniqueIdentifier>{28BD28D9-6964-3049-9C4E-A228C0ADC48C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{A6F06079-0EF8-3FB4-900B-C560EC789256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes">
+      <UniqueIdentifier>{E0B3E2B9-8708-3587-948B-8D5092CC215C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\proj.win32">
+      <UniqueIdentifier>{5B21A562-EE7F-39E4-909A-A3FE89D540CA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Card">
+      <UniqueIdentifier>{ffcbedc7-ee6c-42cf-ab8b-a497865dd6ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Plant">
+      <UniqueIdentifier>{6ea5172d-ea8e-48b6-bac2-f7b59027b910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Zombie">
+      <UniqueIdentifier>{d3a4e648-df58-4a87-b5cb-58a640821648}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Car">
+      <UniqueIdentifier>{7a65fc11-1ccd-47e2-ba0a-377841467476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Sence">
+      <UniqueIdentifier>{f1af2d21-d0d7-48ef-a34a-2080f903ed96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Sun">
+      <UniqueIdentifier>{3fa66e06-cf99-412e-a9ba-25369b4ab136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Classes\Bullet">
+      <UniqueIdentifier>{0086f2ca-f034-43cd-8bdc-df0dfff62879}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

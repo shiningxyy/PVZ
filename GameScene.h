@@ -51,7 +51,7 @@ public:
     bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
     void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
     void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
-    void plant(int row, int col, PlantType t);
+ 
     Sprite* mouse_s;
     PlantType ptype;
     // a selector callback
@@ -64,30 +64,17 @@ public:
     std::vector<Vec2>sunflowerpos;//向日葵坐标
     std::vector<Vec2>peashooterpos;//豌豆坐标
     Vec2 plant_pos[5][9];
-    void compete_plant_pos();//根据行和列计算Vec2
     bool compete_row_col(Vec2 vpos, int& row, int& col);//根据Vec2计算行和列
     double producetime;//下落阳光计时器
     double producetime2;//子弹计时器
     double producetime3;//向日葵阳光计时器
     double producetime4;//卡片冷却计时器
     std::vector<SUN*> suns;
-    std::vector<Bullet*> bullets;//存子弹
-    /*Bullet* b = new Bullet;
-						b->sprite_init(Vec2(ppos.x, ppos.y + 10));
-						this->addChild(b->bulletsprite, 66);
-						b->bullet_move(); //移动到最右边
-						bullets.push_back(b);
-						b->bullet_explode();//爆炸动画
-						b->delete_sprite();//删除精灵，不知道有什么用，先放着
-						bullets.pop_back();//数组弹出子弹元素
-						以下为获取数据的函数
-						virtual Vec2 getposition() const; // 获取二维坐标
-						virtual double getx() const; // getPositionX
-						virtual double gety() const;
-						virtual void set_crash(); // 设置为已撞击，
-						virtual bool judge_crash(); // 返回bool is_crash; 是否碰撞的判断变量   true:碰撞  false：未碰撞
-						virtual void set_attack_num(double damage);// 设置子弹伤害*/
     Label* sun_num;
+    bool is_in_lawn(Vec2);//判断是否在草坪上
+    std::vector<Vec2>plantpos;//植物坐标
+    std::vector<Sprite*>plantsprite;
+    std::vector<Bullet*> bullets;//存子弹
 };
 
 #endif // __GAMESCENE_H__

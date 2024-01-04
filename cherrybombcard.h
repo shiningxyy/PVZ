@@ -1,15 +1,14 @@
 #pragma once
 #include"card.h"
 #include "ui/CocosGUI.h"
-
 using namespace ui;
-class Squashcard :public Card {
+class Cherrybombcard :public Card {
 public:
-	Squashcard() {
+	Cherrybombcard() {
 		this->card_init();
 		this->scheduleUpdate();
 	};
-	~Squashcard() = default;
+	~Cherrybombcard() = default;
 	virtual void card_init();//≥ı ºªØ
 	virtual void cold_animation();//ø®∆¨¿‰»¥∂Øª≠
 	virtual void update(float);

@@ -1,0 +1,10 @@
+^D:\PVZ1\PVZ1\PROJ.WIN32\CMAKEFILES\D6973CE0C59CD49FACB47DE2DDAE74D6\GENERATE.STAMP.RULE
+setlocal
+"D:\Program Files\bin\cmake.exe" -SD:/PVZ1/pvz1 -BD:/PVZ1/pvz1/proj.win32 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/PVZ1/pvz1/proj.win32/pvz1.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

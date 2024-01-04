@@ -25,6 +25,8 @@ bool MenuScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    auto backgroundAudioID = AudioEngine::play2d("music/menu.mp3", true);
+
     auto Menubackground = Sprite::create("Menu/Menu.png");
     Menubackground->setScale(1.14f);
     Menubackground->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
@@ -53,6 +55,7 @@ bool MenuScene::init()
 
 void MenuScene::gamescene(Ref* pSender)
 {
+    AudioEngine::stopAll();
 Director::getInstance()->replaceScene(GameScene::createScene());
 }
 

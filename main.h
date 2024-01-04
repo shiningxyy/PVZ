@@ -22,46 +22,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+#ifndef __MAIN_H__
+#define __MAIN_H__
 
-#include "cocos2d.h"
-#include "ZombieNormal.h"
-#include "StartScene.h"
-#include "GameScene.h"
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
-/**
-@brief    The cocos2d Application.
+// Windows Header Files:
+#include <windows.h>
+#include <tchar.h>
 
-Private inheritance here hides part of interface from Director.
-*/
-class  AppDelegate : private cocos2d::Application
-{
-public:
-    AppDelegate();
-    virtual ~AppDelegate();
+// C RunTime Header Files
+#include "platform/CCStdC.h"
 
-    virtual void initGLContextAttrs();
-
-    /**
-    @brief    Implement Director and Scene init code here.
-    @return true    Initialize success, app continue.
-    @return false   Initialize failed, app terminate.
-    */
-    virtual bool applicationDidFinishLaunching();
-
-    /**
-    @brief  Called when the application moves to the background
-    @param  the pointer of the application
-    */
-    virtual void applicationDidEnterBackground();
-
-    /**
-    @brief  Called when the application reenters the foreground
-    @param  the pointer of the application
-    */
-    virtual void applicationWillEnterForeground();
-};
-
-#endif // _APP_DELEGATE_H_
-
+#endif    // __MAIN_H__

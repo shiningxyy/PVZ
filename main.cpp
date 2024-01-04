@@ -22,46 +22,21 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
-
+#include "main.h"
+#include "AppDelegate.h"
 #include "cocos2d.h"
-#include "ZombieNormal.h"
-#include "StartScene.h"
-#include "GameScene.h"
 
-/**
-@brief    The cocos2d Application.
+USING_NS_CC;
 
-Private inheritance here hides part of interface from Director.
-*/
-class  AppDelegate : private cocos2d::Application
+int WINAPI _tWinMain(HINSTANCE hInstance,
+                       HINSTANCE hPrevInstance,
+                       LPTSTR    lpCmdLine,
+                       int       nCmdShow)
 {
-public:
-    AppDelegate();
-    virtual ~AppDelegate();
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
 
-    virtual void initGLContextAttrs();
-
-    /**
-    @brief    Implement Director and Scene init code here.
-    @return true    Initialize success, app continue.
-    @return false   Initialize failed, app terminate.
-    */
-    virtual bool applicationDidFinishLaunching();
-
-    /**
-    @brief  Called when the application moves to the background
-    @param  the pointer of the application
-    */
-    virtual void applicationDidEnterBackground();
-
-    /**
-    @brief  Called when the application reenters the foreground
-    @param  the pointer of the application
-    */
-    virtual void applicationWillEnterForeground();
-};
-
-#endif // _APP_DELEGATE_H_
-
+    // create the application instance
+    AppDelegate app;
+    return Application::getInstance()->run();
+}

@@ -1,0 +1,20 @@
+^D:\PVZ1\PVZ1\PROJ.WIN32\CMAKEFILES\D6973CE0C59CD49FACB47DE2DDAE74D6\SYNC_RESOURCE-PVZ1.RULE
+setlocal
+"D:\Program Files\bin\cmake.exe" -E echo "Copying resources for pvz1 ..."
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\PVZ1\PVZ1\CMAKELISTS.TXT
+setlocal
+"D:\Program Files\bin\cmake.exe" -SD:/PVZ1/pvz1 -BD:/PVZ1/pvz1/proj.win32 --check-stamp-file D:/PVZ1/pvz1/proj.win32/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
