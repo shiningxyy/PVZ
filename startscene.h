@@ -1,6 +1,6 @@
 
-#ifndef __MENUSCENE_H__
-#define __MENUSCENE_H__
+#ifndef __STARTSCENE_H__
+#define __STARTSCENE_H__
 
 #include "cocos2d.h"
 #include "ZombieNormal.h"
@@ -9,11 +9,10 @@
 #include "ZombieBucket.h"
 #include "Car.h"
 #include "GameScene.h"
-#include "GameScene2.h"
 
 USING_NS_CC;
 
-class MenuScene : public cocos2d::Scene
+class StartScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
@@ -21,10 +20,10 @@ public:
     virtual bool init();
 
     // a selector callback
-    void gamescene(cocos2d::Ref* pSender);
-    void exit(Ref* pSender);
+    void manuscene(cocos2d::Ref* pSender);
 
-    CREATE_FUNC(MenuScene);
+
+    CREATE_FUNC(StartScene);
 };
 
-#endif // __MENUSCENE_H__
+#endif // __LOSESCENE_H__

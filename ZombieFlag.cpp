@@ -11,13 +11,12 @@ bool ZombieFlag::init()
 	type = zombienormal;
 	hp = 100;
 	attack = 10;
-	moverate = 15;
+	moverate = 24;
 	zombie = Sprite::create("FlagZombie/Move/Zombie_0.png");
 	this->addChild(zombie);
 	initmove();
 	initattack();
 	initdie();
-	this->scheduleUpdate();
 	return true;
 
 }
@@ -37,7 +36,6 @@ void ZombieFlag::initmove()
 	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_9.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
 	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_10.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
 	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_11.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
-	moveanimFrames.pushBack(SpriteFrame::create("FlagZombie/Move/Zombie_12.png", Rect(0, 0, zombie->getContentSize().width, zombie->getContentSize().height)));
 }
 void ZombieFlag::initattack()
 {
@@ -68,9 +66,3 @@ void ZombieFlag::initdie()
 	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/09.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
 }
 
-void ZombieFlag::update(float dt)
-{
-	if (hp <= 0) {
-		state = 3;
-	}
-}

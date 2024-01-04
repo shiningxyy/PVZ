@@ -18,12 +18,14 @@ public:
     void setstate(int);
     void setmoverate(float);
     void setrow(int);
+    void setmovelength(int);
     virtual Vec2 getposiition() const;
     virtual float getx() const;
     virtual float gety() const;
     virtual double gethp() const;
     virtual double getattack() const;
     virtual double getstate() const;
+    virtual int getrow() const;
     virtual ZombieType gettype() const;
     virtual void runaction();
     void takedamagefromcar();
@@ -33,6 +35,8 @@ public:
     Sprite* zombie;
     double hp;
     float moverate;
+    float movetime;
+    int movelength;
     int attack;
     int state=1;
     Vector<SpriteFrame*> moveanimFrames;

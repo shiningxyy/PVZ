@@ -12,7 +12,6 @@ public:
     void initmove();
     void initattack();
     void initdie();
-    virtual void update(float);
     CREATE_FUNC(ZombieFlag);
 
 };

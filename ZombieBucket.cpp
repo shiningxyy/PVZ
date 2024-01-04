@@ -11,13 +11,12 @@ bool ZombieBucket::init()
 	type = zombiebucket;
 	hp = 150;
 	attack = 10;
-	moverate = 10;
+	moverate = 20;
 	zombie = Sprite::create("BucketZombie/Move/Zombie_0.png");
 	this->addChild(zombie);
 	initmove();
 	initattack();
 	initdie();
-	scheduleUpdate();
 	return true;
 
 }
@@ -67,11 +66,4 @@ void ZombieBucket::initdie()
 	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/07.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
 	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/08.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
 	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/09.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
-}
-
-void ZombieBucket::update(float dt)
-{
-	if (hp <= 0) {
-		state = 3;
-	}
 }

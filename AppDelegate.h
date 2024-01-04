@@ -27,7 +27,8 @@
 
 #include "cocos2d.h"
 #include "ZombieNormal.h"
-#include "MenuScene.h"
+#include "HelloWorldScene.h"
+#include "StartScene.h"
 #include "GameScene.h"
 
 /**

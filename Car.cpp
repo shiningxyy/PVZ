@@ -12,7 +12,7 @@ bool Car::init()
 	return true;
 }
 
-void Car::setstate(int s)
+void Car::setstate(int s)//·µ»Ø
 {
 	state = s;
 }
@@ -26,13 +26,13 @@ int Car::getstate() const
 }
 void Car::runaction()
 {
-	this->runAction(Sequence::create(MoveBy::create(4, Vec2(1000, 0)), RemoveSelf::create(), nullptr));
+	car->runAction(MoveBy::create(4, Vec2(1030, 0)));
 
 }
 
 Vec2 Car::getposition() const
 {
-	return this->getPosition();
+	return car->getPosition();
 }
 float Car::getx() const
 {
@@ -42,3 +42,4 @@ float Car::gety() const
 {
 	return car->getPositionY();
 }
+

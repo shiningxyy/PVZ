@@ -36,6 +36,12 @@ double ZombieBase::getstate() const
 {
 	return state;
 }
+
+int ZombieBase::getrow() const
+{
+	return row;
+}
+
 void ZombieBase::setstate(int s)
 {
 	state = s;
@@ -44,6 +50,12 @@ void ZombieBase::setmoverate(float r)
 {
 	moverate = r;
 }
+
+void ZombieBase::setmovelength(int l)
+{
+	movelength = l;
+}
+
 
 void ZombieBase::setrow(int r)
 {
@@ -62,7 +74,7 @@ void ZombieBase::runaction()
 		Animation* animation = Animation::createWithSpriteFrames(moveanimFrames, 0.1f);
 		Animate* animate = Animate::create(animation);
 		zombie->runAction(RepeatForever::create(animate));
-		zombie->runAction(MoveBy::create(40 / moverate, Vec2(-1024, 0)));
+		zombie->runAction(MoveTo::create(movelength/moverate, Vec2(0, row*100)));
 
 	}
 	else if (state == 2) {

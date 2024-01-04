@@ -11,13 +11,12 @@ bool ZombieNormal::init()
 	type = zombienormal;
 	hp = 100;
 	attack = 10;
-	moverate = 10;
+	moverate = 20;
 	zombie = Sprite::create("NormalZombie/Move/Zombie_0.png");
 	this->addChild(zombie);
 	initmove();
 	initattack();
 	initdie();
-	this->scheduleUpdate();
 	return true;
 
 }
@@ -85,11 +84,4 @@ void ZombieNormal::initdie()
 	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/07.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
 	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/08.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
 	dieanimFrames.pushBack(SpriteFrame::create("NormalZombie/Die/09.png", Rect(0, 0, zombie->getContentSize().width + 50, zombie->getContentSize().height)));
-}
-void ZombieNormal::update(float dt)
-{
-	if (state==3) {
-		state = 3;
-
-	}
 }
