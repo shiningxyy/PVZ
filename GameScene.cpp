@@ -1,6 +1,6 @@
 #include "GameScene.h"
 
-int total_collection = 0;
+int total_collection = 50;
 Scene* GameScene::createScene()
 {
     return GameScene::create();
@@ -57,6 +57,7 @@ bool GameScene::init()
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 	createplant();
 
+	/*
 	{//生成初始阳光
 		SUN* new_sun = new SUN(sunflower);
 		new_sun->sunsprite->setScale(0.2f);
@@ -73,6 +74,7 @@ bool GameScene::init()
 		sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 		sun_num->enableShadow();
 	}
+	*/
 
 
     this->scheduleUpdate();
@@ -111,7 +113,7 @@ void GameScene::createcar() {
     carnumber.pushBack(car5);
 }
 
- void  GameScene::update(float updatetime)
+void  GameScene::update(float updatetime)
 {
 	 this->producetime += updatetime;
 	 gametime++;
@@ -159,9 +161,19 @@ void GameScene::createcar() {
 		 }
 	 }
 
+	 for (auto& it : cards) {
+		 if (it->cold == true) {
+			 it->time_count += updatetime;
+			 if (it->card_cd <= it->time_count) {
+				 it->cold = false;
+				 it->time_count = 0;
+			 }
+		 }
+	 }
+
 	 if (producetime >= 10.0) {
 		 producetime = 0;
-		 SUN* new_sun = new SUN(sunflower);
+		 SUN* new_sun = new SUN(sky);
 		 new_sun->sunsprite->setScale(0.2f);
 		 this->addChild(new_sun->sunsprite, 3);
 		 suns.push_back(new_sun);
@@ -171,21 +183,124 @@ void GameScene::createcar() {
 		 auto _mouseListener = EventListenerMouse::create();
 		 _mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
 		 _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
-		 total_collection = 0;
+		 total_collection = 50;
 		 for (SUN* sun : suns) {
-			 total_collection += sun->collection;
-		 }
-		
+			 total_collection += (sun->collection*25);
+		 }	
+
 		 //total_collection = (suns.size()-1)*25;
-		 sun_num = Label::createWithTTF(std::to_string(total_collection*25), "fonts/Marker Felt.ttf", 24);
+		 auto cover = Sprite::create("game/cover.png");
+		 
+		 cover->setPosition(Vec2(40,Y_MAX-75));
+		 this->addChild(cover, 4);
+		 if (sun_num != nullptr) {
+			 this->removeChild(sun_num);
+		 }
+		 sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
 		 this->addChild(sun_num, 5);
 		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 		 sun_num->enableShadow();
 	 }
-	 
+	 else
+	 {
+		 total_collection = 50;
+		 for (SUN* sun : suns) {
+			 total_collection += (sun->collection * 25);
+		 }
+		 //total_collection = (suns.size()-1)*25;
+		 auto cover = Sprite::create("game/cover.png");
+
+		 cover->setPosition(Vec2(40, Y_MAX - 75));
+		 this->addChild(cover, 4);
+		 sun_num = Label::createWithTTF(std::to_string(total_collection ), "fonts/Marker Felt.ttf", 24);
+		 this->addChild(sun_num, 5);
+		 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
+		 sun_num->enableShadow();
+	 }
+	 //向日葵生成，豌豆生成
+	 {
+		 for (auto it = plants.begin(); it != plants.end(); it++) {
+			 if ((*it)->get_blood() <= 0) {
+				 (*it)->get_sprite()->removeFromParent();
+				 (*it)->removeFromParent();
+				 it = plants.erase(it);
+				 continue;
+			 }
+			 if ((*it)->get_type() == SUNFLOWER) {
+				 this->producetime3 += updatetime;
+				 if (this->producetime3 >= (*it)->rate_time) {
+					 this->producetime3 = 0.0;
+					 for (auto ppos = sunflowerpos.begin(); ppos != sunflowerpos.end(); ppos++)
+					 {
+						 SUN* new_sun = new SUN(sunflower);
+						 new_sun->sunsprite->setScale(0.2f);
+						 this->addChild(new_sun->sunsprite, 3);
+						 suns.push_back(new_sun);
+
+						 //new_sun->start_move();  // 生成阳光并下落
+						 new_sun->jump(*ppos);//给坐标，直接有阳光
+						 auto _mouseListener = EventListenerMouse::create();
+						 _mouseListener->onMouseDown = CC_CALLBACK_1(SUN::onMouseDown, new_sun);
+						 _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
+						 total_collection = 50;
+						 for (SUN* sun : suns) {
+							 total_collection += (sun->collection * 25);
+						 }
+						 //total_collection = (suns.size()-1)*25;
+						 auto cover = Sprite::create("game/cover.png");
+						 cover->setScale(1.1f);
+						 cover->setPosition(Vec2(40, Y_MAX - 75));
+						 this->addChild(cover, 4);
+						 if (sun_num != nullptr) {
+							 this->removeChild(sun_num);
+						 }
+						 sun_num = Label::createWithTTF(std::to_string(total_collection), "fonts/Marker Felt.ttf", 24);
+						 this->addChild(sun_num, 5);
+						 sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
+						 sun_num->enableShadow();
+					 }
+				 }
+			 }			 
+			 else if ((*it)->get_type() == PEASHOOTER) {
+				 this->producetime2 += updatetime;
+				 if (this->producetime2 >= (*it)->rate_time)
+				 {
+					 this->producetime2 = 0;			
+					 for(auto ppos=peashooterpos.begin(); ppos != peashooterpos.end();ppos++)
+					 {
+						 Bullet b;
+						 b.sprite_init(Vec2((*ppos).x, (*ppos).y + 10));
+						 this->addChild(b.bulletsprite, 66);
+						 b.bullet_move();
+						 b.bullet_explode();
+					 }
+				 }
+			 }
+			 
+		 }
+		/*
+		 for (auto it = plants.begin(); it != plants.end(); it++) {		 
+			 if ((*it)->get_type() == PEASHOOTER) {
+				 this->producetime2 += updatetime;
+				 if (this->producetime2 >= 1.5)
+				 {
+					 this->producetime2 = 0;
+					 Bullet b;
+					 for(auto ppos=peashooterpos.begin(); ppos != peashooterpos.end();ppos++)
+					 {
+						 b.sprite_init(Vec2((*ppos).x, (*ppos).y + 10));
+						 this->addChild(b.bulletsprite, 66);
+						 b.bullet_move();
+						 b.bullet_explode();
+					 }
+				 }
+			 }
+		 }
+		*/
+	 }
 }
 
- void GameScene::createzombie()
+void GameScene::createzombie()
  {
 	 int i = 10;
 	 if (gametime ==10)
@@ -206,7 +321,7 @@ void GameScene::createcar() {
 		 zombienumber.pushBack(ZOMBIE13);
 
 	 }
-	 else if (gametime == 500) {
+	 else if (gametime == 100) {
 		 auto ZOMBIE21 = ZombieNormal::create();
 		 ZOMBIE21->zombie->setPosition(Vec2(1500, 400));
 		 ZOMBIE21->setrow(4);
@@ -229,7 +344,7 @@ void GameScene::createcar() {
 		 ZOMBIE23->runaction();
 		 zombienumber.pushBack(ZOMBIE23);
 	 }
-	 else if (gametime == 1000) {
+	 else if (gametime == 200) {
 		 auto ZOMBIE31 = ZombieFlag::create();
 		 ZOMBIE31->zombie->setPosition(Vec2(1500, 300));
 		 ZOMBIE31->setrow(3);
@@ -273,7 +388,7 @@ void GameScene::createcar() {
 
  }
 
- void GameScene::createplant() {
+void GameScene::createplant() {
 	 {//创建植物卡片
 		 Sunflowercard* c1 = new Sunflowercard;
 		 c1->sprite_init("sunflower", Vec2(105, 555));
@@ -310,7 +425,7 @@ bool GameScene::onTouchBegan(Touch* touch, Event* event)//触摸开始
 
 	for (int i = 0; i < 4; i++) {
 		auto t = cards[i];
-		if (t->cold == true || mouse_s != nullptr)//还在冷却，该卡不可选
+		if (t->cold == true || mouse_s != nullptr )//还在冷却，该卡不可选
 			continue;
 		double w = t->sprite->getContentSize().width / 2;
 		double h = t->sprite->getContentSize().height / 2;
@@ -414,28 +529,29 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					this->addChild(mySprite, 0);
 					Vector<SpriteFrame*> animFrames;
 					animFrames.reserve(18);
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_0.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_1.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_2.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_3.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_4.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_5.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_6.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_7.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_8.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_9.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_10.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_11.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_12.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_13.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_14.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_15.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_16.png", Rect(0, 0, 64, 90)));
-					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_17.png", Rect(0, 0, 64, 90)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_0.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_1.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_2.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_3.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_4.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_5.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_6.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_7.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_8.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_9.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_10.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_11.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_12.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_13.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_14.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_15.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_16.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("SunFlower/SunFlower_17.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
-					{
+
+					/* {
 						SUN* new_sun = new SUN(sunflower);
 						new_sun->sunsprite->setScale(0.2f);
 						this->addChild(new_sun->sunsprite, 3);
@@ -449,13 +565,20 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 						for (SUN* sun : suns) {
 							total_collection += sun->collection;
 						}
-						//total_collection =( suns.size()-1) * 25;
+						//total_collection = total_collection/2;
+						auto cover = Sprite::create("game/cover.png");
+						cover->setScale(1.1f);
+						cover->setPosition(Vec2(40, Y_MAX - 75));
+						this->addChild(cover, 4);
+						if (sun_num != nullptr) {
+							this->removeChild(sun_num);
+						}
 						sun_num = Label::createWithTTF(std::to_string(total_collection*25), "fonts/Marker Felt.ttf", 24);
 						
 						this->addChild(sun_num, 5);
 						sun_num->setPosition(Vec2(40, Y_MAX - 80));  // 适当调整 Label 位置
 						sun_num->enableShadow();
-					}
+					}*/
 				}
 				//this->addChild(tempplant->run_animation(plantpos));
 				break;
@@ -469,19 +592,19 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					peashooterpos.emplace_back(ppos);//把豌豆射手的坐标存起来
 					this->addChild(mySprite, 0);
 					animFrames.reserve(13);
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_0.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_1.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_2.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_3.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_4.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_5.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_6.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_7.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_8.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_9.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_10.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_11.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_12.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_0.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_1.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_2.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_3.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_4.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_5.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_6.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_7.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_8.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_9.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_10.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_11.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("Peashooter/Peashooter_12.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
@@ -490,7 +613,7 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 						b.sprite_init(Vec2(ppos.x, ppos.y + 10));
 						this->addChild(b.bulletsprite, 66);
 						b.bullet_move();
-						//b.bullet_explode();
+
 					}
 				}
 				//this->addChild(tempplant->run_animation(plantpos));
@@ -504,22 +627,22 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					mySprite->setPosition(ppos);
 					this->addChild(mySprite, 0);
 					animFrames.reserve(16);
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_0.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_1.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_2.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_3.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_4.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_5.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_6.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_7.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_8.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_9.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_10.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_11.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_12.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_13.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_14.png", Rect(0, 0, 80, 90)));
-					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_15.png", Rect(0, 0, 80, 90)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_0.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_1.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_2.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_3.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_4.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_5.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_6.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_7.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_8.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_9.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_10.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_11.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_12.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_13.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_14.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("WallNut/WallNut_15.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
@@ -536,13 +659,13 @@ void GameScene::onTouchEnded(Touch* touch, Event* event)//触摸结束
 					mySprite->setScale(0.9f);
 					this->addChild(mySprite, 0);
 					animFrames.reserve(7);
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_0.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_1.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_2.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_3.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_4.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_5.png", Rect(0, 0, 110, 90)));
-					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_6.png", Rect(0, 0, 110, 90)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_0.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_1.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_2.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_3.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_4.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_5.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
+					animFrames.pushBack(SpriteFrame::create("CherryBomb/CherryBomb_6.png", Rect(0, 0, mySprite->getContentSize().width, mySprite->getContentSize().height)));
 					Animation* animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
 					Animate* animate = Animate::create(animation);
 					mySprite->runAction(RepeatForever::create(animate));
