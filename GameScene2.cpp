@@ -254,19 +254,14 @@ void  GameScene2::update(float updatetime)
 				it = plants.erase(it);
 				continue;
 			}
-		*/ int i = 0;
-		auto is = plantsprite.begin();
-		for (auto it = plants.begin(); it != plants.end() && is != plantsprite.end();) {
+		*/
+		for (auto it = plants.begin(); it != plants.end(); it++) {
 			if ((*it)->get_blood() <= 0) {
-				// int len1 = plants.size();
 				// plantsprite[i]->removeFromParent();
-				 // for (int j = i; j < len1-1; j++)
-				 // plantsprite[j] = plantsprite[j + 1];
-				 // plantsprite[len1 - 1] = NULL;
-				// (*is)->removeFromParent();
-				// is = plantsprite.erase(is);
-				// (*it)->removeFromParent();
-				// it = plants.erase(it);
+				// for (int j = i; j < len1-1; j++)
+				//	 plantsprite[j] = plantsprite[j + 1];
+				(*it)->removeFromParent();
+				//it = plants.erase(it);
 				continue;
 			}
 			if ((*it)->get_type() == SUNFLOWER) {
@@ -319,9 +314,6 @@ void  GameScene2::update(float updatetime)
 					}
 				}
 			}
-			it++;
-			is++;
-			i++;
 		}
 
 
