@@ -298,7 +298,7 @@ void  GameScene::update(float updatetime)
 				 continue;
 			 }
 		 */ 		 
-		 for (auto it = plants.begin(); it != plants.end(); it++, i++) {
+		 for (auto it = plants.begin(); it != plants.end(); it++) {
 			 if ((*it)->get_blood() <= 0) {
 				 // plantsprite[i]->removeFromParent();
 				 // for (int j = i; j < len1-1; j++)
