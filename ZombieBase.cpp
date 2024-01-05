@@ -69,7 +69,7 @@ ZombieType ZombieBase::gettype() const
 
 void ZombieBase::runaction()
 {
-	zombie->stopAllActions();
+	zombie->stopAllActions();//停止其他动作
 	if (state == 1) {
 		Animation* animation = Animation::createWithSpriteFrames(moveanimFrames, 0.1f);
 		Animate* animate = Animate::create(animation);
@@ -100,4 +100,16 @@ void ZombieBase::takedamagefromcar()
 void ZombieBase::takedamagefromplant(int value)
 {
 	hp =hp-value;
+}
+
+
+void ZombieBase::initmove()
+{
+}
+
+void ZombieBase::initattack()
+{
+}
+void ZombieBase::initdie()
+{
 }
